@@ -1,5 +1,5 @@
 import flet as ft
-import datetime, random, json, os, requests, csv, difflib, time
+import datetime, random, requests, difflib, time
 
 # ==========================================
 # CONSTANTES Y COLORES EVA-01
@@ -13,8 +13,6 @@ WARNING_ORANGE = "#F97316"
 DANGER_RED = "#EF4444"
 TEXT_WHITE = "#F8FAFC"
 TEXT_MUTED = "#94A3B8"        
-
-ARCHIVO_DATOS = "datos_eva_flet.json"
 
 # ==========================================
 # CEREBRO MAGI Y DICCIONARIO
@@ -90,17 +88,6 @@ LANG = {
     }
 }
 
-def cargar_datos():
-    if os.path.exists(ARCHIVO_DATOS):
-        with open(ARCHIVO_DATOS, "r") as f:
-            d = json.load(f)
-            if "diccionario_magi" not in d: d["diccionario_magi"] = {}
-            return d
-    return {"perfil": {"configurado": False}, "glicemias": [], "bandeja": [], "diccionario_magi": {}, "config": {}}
-
-def guardar_datos(datos):
-    with open(ARCHIVO_DATOS, "w") as f: json.dump(datos, f, indent=4)
-
 def generar_pool_rutinas(meta_idx, eq_idx, cond):
     s_txt = "3x12" if cond < 3 else "4x15"
     if eq_idx == 0: return [("CALISTENIA A", ["Push-ups", "Squats", "Plank", "Burpees"], s_txt), ("CALISTENIA B", ["Dips", "Lunges", "Crunches", "Jumping Jacks"], s_txt)]
@@ -108,13 +95,19 @@ def generar_pool_rutinas(meta_idx, eq_idx, cond):
     else: return [("HOME PESAS A", ["DB Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt), ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt)]
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 4.5"
+    page.title = "MAGI OS 4.6"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
     page.fonts = {"Consolas": "Consolas"}
     
-    app_data = cargar_datos()
+    # --- SISTEMA DE GUARDADO SEGURO PARA ANDROID ---
+    def guardar_datos(datos):
+        page.client_storage.set("magi_data", datos)
+
+    app_data = page.client_storage.get("magi_data")
+    if not app_data:
+        app_data = {"perfil": {"configurado": False}, "glicemias": [], "bandeja": [], "diccionario_magi": {}, "config": {}}
     
     for lang in ["es", "en"]:
         for alim, vals in ALIMENTOS_OFFLINE[lang].items():
@@ -422,7 +415,7 @@ def main(page: ft.Page):
     
     app_bar = ft.AppBar(
         leading=ft.IconButton("menu", on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
-        title=ft.Text("MAGI OS 4.5", color=TEXT_WHITE, font_family="Courier"),
+        title=ft.Text("MAGI OS 4.6", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
