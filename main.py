@@ -1,5 +1,5 @@
 import flet as ft
-import datetime, random, requests, difflib, time
+import datetime, random, json, os, requests, difflib, time, tempfile
 
 # ==========================================
 # CONSTANTES Y COLORES EVA-01
@@ -94,26 +94,86 @@ def generar_pool_rutinas(meta_idx, eq_idx, cond):
     elif eq_idx == 2: return [("GYM A", ["Bench Press", "Squats", "Lat Pulldown", "Cables"], s_txt), ("GYM B", ["Deadlift", "OHP", "Rows", "Leg Press"], s_txt)]
     else: return [("HOME PESAS A", ["DB Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt), ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt)]
 
+# ==========================================
+# SISTEMA DE ALMACENAMIENTO BLINDADO V4.7
+# ==========================================
+MAGI_MEMORY = {
+    "perfil": {"configurado": False},
+    "glicemias": [],
+    "diccionario_magi": {},
+    "config": {}
+}
+
+def obtener_ruta_segura():
+    try:
+        return os.path.join(tempfile.gettempdir(), "magi_data_v4.json")
+    except Exception:
+        return "magi_fallback.json"
+
+def cargar_datos_blindado(page):
+    global MAGI_MEMORY
+    
+    # Intento 1: Storage nativo Flet (Si existe)
+    try:
+        if hasattr(page, "client_storage") and page.client_storage is not None:
+            d = page.client_storage.get("magi_data")
+            if d:
+                MAGI_MEMORY = d
+                return MAGI_MEMORY
+    except Exception:
+        pass
+
+    # Intento 2: Archivo temporal seguro Android
+    try:
+        ruta = obtener_ruta_segura()
+        if os.path.exists(ruta):
+            with open(ruta, "r") as f:
+                d = json.load(f)
+                if d:
+                    MAGI_MEMORY = d
+                    return MAGI_MEMORY
+    except Exception:
+        pass
+
+    # Intento 3: Memoria RAM (Infalible)
+    return MAGI_MEMORY
+
+def guardar_datos_blindado(page, datos):
+    global MAGI_MEMORY
+    MAGI_MEMORY = datos
+    
+    # Intento 1
+    try:
+        if hasattr(page, "client_storage") and page.client_storage is not None:
+            page.client_storage.set("magi_data", datos)
+    except Exception:
+        pass
+        
+    # Intento 2
+    try:
+        ruta = obtener_ruta_segura()
+        with open(ruta, "w") as f:
+            json.dump(datos, f)
+    except Exception:
+        pass
+
+
 def main(page: ft.Page):
-    page.title = "MAGI OS 4.6"
+    page.title = "MAGI OS 4.7"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
     page.fonts = {"Consolas": "Consolas"}
     
-    # --- SISTEMA DE GUARDADO SEGURO PARA ANDROID ---
-    def guardar_datos(datos):
-        page.client_storage.set("magi_data", datos)
-
-    app_data = page.client_storage.get("magi_data")
-    if not app_data:
-        app_data = {"perfil": {"configurado": False}, "glicemias": [], "bandeja": [], "diccionario_magi": {}, "config": {}}
+    # Inicializar datos blindados
+    app_data = cargar_datos_blindado(page)
     
     for lang in ["es", "en"]:
         for alim, vals in ALIMENTOS_OFFLINE[lang].items():
             if alim not in app_data["diccionario_magi"]:
                 app_data["diccionario_magi"][alim] = vals
-    guardar_datos(app_data)
+                
+    guardar_datos_blindado(page, app_data)
     
     current_lang = "es"
     current_view = "mindset"
@@ -139,7 +199,7 @@ def main(page: ft.Page):
                     "meta_idx": l["metas"].index(dd_meta.value), "equipo_idx": l["equipos"].index(dd_eq.value),
                     "acondicionamiento": int(dd_cond.value[0]), "configurado": True
                 }
-                guardar_datos(app_data)
+                guardar_datos_blindado(page, app_data)
                 mostrar_alerta(f"{l['imc_res']} | IMC: {imc:.1f}", NEON_PURPLE)
                 iniciar_app_principal()
             except Exception:
@@ -225,7 +285,7 @@ def main(page: ft.Page):
                 estado = "Hipo" if val < 80 else ("Óptimo" if val <= 140 else "Hiper")
                 ahora = datetime.datetime.now()
                 app_data["glicemias"].append({"fecha": ahora.strftime("%Y-%m-%d"), "hora": ahora.strftime("%H:%M"), "valor": val, "momento": dd_mom.value, "estado_raw": estado})
-                guardar_datos(app_data)
+                guardar_datos_blindado(page, app_data)
                 tf_gl.value = ""
                 actualizar_datos_estado()
                 mostrar_alerta("Dato Glucémico Guardado", NEON_GREEN)
@@ -384,7 +444,7 @@ def main(page: ft.Page):
 
     def reset_app(e):
         app_data["perfil"]["configurado"] = False
-        guardar_datos(app_data)
+        guardar_datos_blindado(page, app_data)
         page.drawer.open = False
         page.views.clear()
         page.views.append(ft.View("/", [build_onboarding()]))
@@ -415,7 +475,7 @@ def main(page: ft.Page):
     
     app_bar = ft.AppBar(
         leading=ft.IconButton("menu", on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
-        title=ft.Text("MAGI OS 4.6", color=TEXT_WHITE, font_family="Courier"),
+        title=ft.Text("MAGI OS 4.7", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
