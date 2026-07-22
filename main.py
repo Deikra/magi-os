@@ -108,7 +108,7 @@ def generar_pool_rutinas(meta_idx, eq_idx, cond):
     else: return [("HOME PESAS A", ["DB Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt), ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt)]
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 4.2"
+    page.title = "MAGI OS 4.3"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.window.width = 400
@@ -177,7 +177,7 @@ def main(page: ft.Page):
             page.update()
 
         return ft.Column([
-            ft.Text(l["mindset_title"], size=24, color=NEON_PURPLE, weight="bold"),
+            ft.Text(l["tab_mindset"], size=24, color=NEON_PURPLE, weight="bold"),
             ft.Container(content=texto_quote, padding=30, bgcolor=CARD_BG, border_radius=10, expand=True),
             ft.ElevatedButton(l["btn_directiva"], bgcolor=NEON_GREEN, color=BG_COLOR, on_click=cambiar_frase)
         ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, expand=True)
@@ -217,9 +217,9 @@ def main(page: ft.Page):
             hiper = sum(1 for d in datos_filtrados if d["valor"] > 140)
             
             sections = []
-            if hipo > 0: sections.append(ft.PieChartSection(hipo, color=DANGER_RED, radius=45, title=f"Hipo"))
-            if optimo > 0: sections.append(ft.PieChartSection(optimo, color=NEON_GREEN, radius=45, title=f"Óptimo"))
-            if hiper > 0: sections.append(ft.PieChartSection(hiper, color=WARNING_ORANGE, radius=45, title=f"Hiper"))
+            if hipo > 0: sections.append(ft.PieChartSection(hipo, color=DANGER_RED, radius=45, title="Hipo"))
+            if optimo > 0: sections.append(ft.PieChartSection(optimo, color=NEON_GREEN, radius=45, title="Óptimo"))
+            if hiper > 0: sections.append(ft.PieChartSection(hiper, color=WARNING_ORANGE, radius=45, title="Hiper"))
             
             if sections:
                 chart_container.content = ft.PieChart(sections=sections, sections_space=2, center_space_radius=30)
@@ -405,6 +405,7 @@ def main(page: ft.Page):
         page.drawer.open = False
         iniciar_app_principal()
 
+    # Íconos corregidos y asegurados para compatibilidad móvil total (V4.3)
     drawer = ft.NavigationDrawer(
         on_change=navigate,
         bgcolor=SURFACE_COLOR,
@@ -412,10 +413,10 @@ def main(page: ft.Page):
             ft.Container(height=20),
             ft.Text("   MAGI OS TACTICAL", size=20, weight="bold", color=NEON_GREEN),
             ft.Divider(thickness=2, color=CARD_BG),
-            ft.NavigationDrawerDestination(icon=ft.icons.PSYCHOLOGY, label="Mindset"),
-            ft.NavigationDrawerDestination(icon=ft.icons.BLOODTYPE, label="Estado"),
+            ft.NavigationDrawerDestination(icon=ft.icons.LIGHTBULB, label="Mindset"),
+            ft.NavigationDrawerDestination(icon=ft.icons.WATER_DROP, label="Estado"),
             ft.NavigationDrawerDestination(icon=ft.icons.FITNESS_CENTER, label="Combate"),
-            ft.NavigationDrawerDestination(icon=ft.icons.BATTERY_CHARGING_FULL, label="Energía"),
+            ft.NavigationDrawerDestination(icon=ft.icons.BATTERY_FULL, label="Energía"),
             ft.Divider(thickness=2, color=CARD_BG),
             ft.ListTile(leading=ft.Icon(ft.icons.LANGUAGE, color=TEXT_WHITE), title=ft.Text("Language / Idioma"), on_click=toggle_lang),
             ft.ListTile(leading=ft.Icon(ft.icons.SETTINGS, color=WARNING_ORANGE), title=ft.Text("Reconfigurar"), on_click=reset_app),
@@ -424,7 +425,7 @@ def main(page: ft.Page):
     
     app_bar = ft.AppBar(
         leading=ft.IconButton(ft.icons.MENU, on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
-        title=ft.Text("MAGI OS 4.2", color=TEXT_WHITE, font_family="Courier"),
+        title=ft.Text("MAGI OS 4.3", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
