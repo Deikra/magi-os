@@ -108,7 +108,7 @@ def generar_pool_rutinas(meta_idx, eq_idx, cond):
     else: return [("HOME PESAS A", ["DB Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt), ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt)]
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 4.3"
+    page.title = "MAGI OS 4.4"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.window.width = 400
@@ -244,7 +244,7 @@ def main(page: ft.Page):
         actualizar_datos_estado()
 
         return ft.Column([
-            ft.Row([tf_gl, dd_mom, ft.IconButton(ft.icons.SAVE, icon_color=NEON_PURPLE, on_click=guardar_gl)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([tf_gl, dd_mom, ft.IconButton("save", icon_color=NEON_PURPLE, on_click=guardar_gl)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             dd_filtro,
             ft.Container(content=chart_container, bgcolor=CARD_BG, border_radius=10, padding=10),
             ft.Container(content=historial_lista, expand=True, bgcolor=CARD_BG, border_radius=10, padding=10)
@@ -307,7 +307,7 @@ def main(page: ft.Page):
             body_content.content = view_combate(); page.update()
 
         return ft.Column([
-            ft.Row([ft.Text(titulo, color=WARNING_ORANGE, size=20, weight="bold"), ft.IconButton(ft.icons.REFRESH, on_click=cambiar_rutina)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([ft.Text(titulo, color=WARNING_ORANGE, size=20, weight="bold"), ft.IconButton("refresh", on_click=cambiar_rutina)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             lbl_sync, prog_bar,
             ft.Container(content=lista_ej, expand=True),
             ft.Container(content=ft.Column([
@@ -315,7 +315,7 @@ def main(page: ft.Page):
                 ft.Row([
                     ft.ElevatedButton("90s", on_click=lambda e: start_timer(90), bgcolor=NEON_GREEN, color=BG_COLOR),
                     ft.ElevatedButton("120s", on_click=lambda e: start_timer(120), bgcolor=WARNING_ORANGE, color=BG_COLOR),
-                    ft.IconButton(ft.icons.STOP_CIRCLE, icon_color=DANGER_RED, on_click=stop_timer)
+                    ft.IconButton("stop_circle", icon_color=DANGER_RED, on_click=stop_timer)
                 ], alignment=ft.MainAxisAlignment.CENTER)
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER), bgcolor=CARD_BG, padding=10, border_radius=10)
         ], expand=True)
@@ -374,7 +374,7 @@ def main(page: ft.Page):
 
         return ft.Column([
             ft.Row([dd_mom, tf_alim]),
-            ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), ft.IconButton(ft.icons.DELETE, on_click=limpiar, icon_color=DANGER_RED)]),
+            ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), ft.IconButton("delete", icon_color=DANGER_RED, on_click=limpiar)]),
             lbl_status,
             ft.Container(content=ft.Column([tabla], scroll=ft.ScrollMode.ALWAYS), expand=True, bgcolor=CARD_BG, border_radius=10),
             ft.Container(content=ft.Row([lbl_tot, ft.ElevatedButton(l["btn_ensenar"], on_click=enseñar, bgcolor=NEON_PURPLE, color=TEXT_WHITE)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=10)
@@ -405,7 +405,7 @@ def main(page: ft.Page):
         page.drawer.open = False
         iniciar_app_principal()
 
-    # Íconos corregidos y asegurados para compatibilidad móvil total (V4.3)
+    # Íconos blindados mediante cadenas de texto (strings) universales
     drawer = ft.NavigationDrawer(
         on_change=navigate,
         bgcolor=SURFACE_COLOR,
@@ -413,19 +413,19 @@ def main(page: ft.Page):
             ft.Container(height=20),
             ft.Text("   MAGI OS TACTICAL", size=20, weight="bold", color=NEON_GREEN),
             ft.Divider(thickness=2, color=CARD_BG),
-            ft.NavigationDrawerDestination(icon=ft.icons.LIGHTBULB, label="Mindset"),
-            ft.NavigationDrawerDestination(icon=ft.icons.WATER_DROP, label="Estado"),
-            ft.NavigationDrawerDestination(icon=ft.icons.FITNESS_CENTER, label="Combate"),
-            ft.NavigationDrawerDestination(icon=ft.icons.BATTERY_FULL, label="Energía"),
+            ft.NavigationDrawerDestination(icon="lightbulb", label="Mindset"),
+            ft.NavigationDrawerDestination(icon="water_drop", label="Estado"),
+            ft.NavigationDrawerDestination(icon="fitness_center", label="Combate"),
+            ft.NavigationDrawerDestination(icon="battery_full", label="Energía"),
             ft.Divider(thickness=2, color=CARD_BG),
-            ft.ListTile(leading=ft.Icon(ft.icons.LANGUAGE, color=TEXT_WHITE), title=ft.Text("Language / Idioma"), on_click=toggle_lang),
-            ft.ListTile(leading=ft.Icon(ft.icons.SETTINGS, color=WARNING_ORANGE), title=ft.Text("Reconfigurar"), on_click=reset_app),
+            ft.ListTile(leading=ft.Icon("language", color=TEXT_WHITE), title=ft.Text("Language / Idioma"), on_click=toggle_lang),
+            ft.ListTile(leading=ft.Icon("settings", color=WARNING_ORANGE), title=ft.Text("Reconfigurar"), on_click=reset_app),
         ],
     )
     
     app_bar = ft.AppBar(
-        leading=ft.IconButton(ft.icons.MENU, on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
-        title=ft.Text("MAGI OS 4.3", color=TEXT_WHITE, font_family="Courier"),
+        leading=ft.IconButton("menu", on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
+        title=ft.Text("MAGI OS 4.4", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
