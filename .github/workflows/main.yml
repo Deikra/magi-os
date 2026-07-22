@@ -1,0 +1,34 @@
+name: Construir APK de MAGI
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar código
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias de MAGI
+        run: pip install -r requirements.txt
+
+      - name: Configurar motor Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Ensamblar APK
+        run: flet build apk
+
+      - name: Guardar APK generado
+        uses: actions/upload-artifact@v4
+        with:
+          name: MAGI-APK
+          path: build/apk/**/*.apk
