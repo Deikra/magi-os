@@ -108,11 +108,9 @@ def generar_pool_rutinas(meta_idx, eq_idx, cond):
     else: return [("HOME PESAS A", ["DB Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt), ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt)]
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 4.4"
+    page.title = "MAGI OS 4.5"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
-    page.window.width = 400
-    page.window.height = 800
     page.padding = 0
     page.fonts = {"Consolas": "Consolas"}
     
@@ -405,7 +403,6 @@ def main(page: ft.Page):
         page.drawer.open = False
         iniciar_app_principal()
 
-    # Íconos blindados mediante cadenas de texto (strings) universales
     drawer = ft.NavigationDrawer(
         on_change=navigate,
         bgcolor=SURFACE_COLOR,
@@ -425,7 +422,7 @@ def main(page: ft.Page):
     
     app_bar = ft.AppBar(
         leading=ft.IconButton("menu", on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
-        title=ft.Text("MAGI OS 4.4", color=TEXT_WHITE, font_family="Courier"),
+        title=ft.Text("MAGI OS 4.5", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
