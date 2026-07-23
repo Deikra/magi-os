@@ -90,22 +90,21 @@ def generar_pool_rutinas(meta_idx, eq_idx, cond):
         return [("HOME PESAS A", ["DB Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt, cardio), ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt, cardio)]
 
 # ==========================================
-# SOLUCIÓN DE INGENIERÍA: BOTÓN PERSONALIZADO (IconBtn)
-# Bypassea por completo los errores de IconButton en la nube
+# SOLUCIÓN DE INGENIERÍA: BOTÓN PERSONALIZADO 
+# Libre del atributo alignment para no crashear en Android
 # ==========================================
 def IconBtn(icono, color, accion):
     return ft.Container(
         content=ft.Icon(icono, color=color),
         on_click=accion,
-        padding=10, 
-        alignment=ft.alignment.center
+        padding=10
     )
 
 def main(page: ft.Page):
     # ==========================================
     # CONFIGURACIÓN BASE
     # ==========================================
-    page.title = "MAGI OS 5.7"
+    page.title = "MAGI OS 5.8"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -229,7 +228,8 @@ def main(page: ft.Page):
         dd_mom = ft.Dropdown(options=[ft.dropdown.Option(m) for m in l["gl_momentos"]], value=l["gl_momentos"][0], width=140, bgcolor=SURFACE_COLOR)
         dd_filtro = ft.Dropdown(options=[ft.dropdown.Option(m) for m in l["filtros_gl"]], value=l["filtros_gl"][0], width=140, bgcolor=SURFACE_COLOR)
         
-        chart_container = ft.Container(height=180, alignment=ft.alignment.center)
+        # Eliminado el ft.alignment problemático
+        chart_container = ft.Container(height=180) 
         historial_lista = ft.ListView(expand=True, spacing=5)
 
         def actualizar_datos_estado(e=None):
@@ -262,8 +262,11 @@ def main(page: ft.Page):
             if optimo > 0: sections.append(ft.PieChartSection(optimo, color=NEON_GREEN, radius=45, title="Óptimo"))
             if hiper > 0: sections.append(ft.PieChartSection(hiper, color=WARNING_ORANGE, radius=45, title="Hiper"))
             
-            if sections: chart_container.content = ft.PieChart(sections=sections, sections_space=2, center_space_radius=30)
-            else: chart_container.content = ft.Text("Sin datos", color=TEXT_MUTED)
+            # Usando un Row con MainAxisAlignment.CENTER como reemplazo blindado
+            if sections: 
+                chart_container.content = ft.Row([ft.PieChart(sections=sections, sections_space=2, center_space_radius=30)], alignment=ft.MainAxisAlignment.CENTER)
+            else: 
+                chart_container.content = ft.Row([ft.Text("Sin datos", color=TEXT_MUTED)], alignment=ft.MainAxisAlignment.CENTER)
                 
             page.update()
 
@@ -282,7 +285,6 @@ def main(page: ft.Page):
         dd_filtro.on_change = actualizar_datos_estado
         actualizar_datos_estado()
 
-        # Usamos nuestro IconBtn personalizado en lugar del IconButton nativo
         btn_guardar = IconBtn("save", NEON_PURPLE, guardar_gl)
 
         return ft.Column([
@@ -349,7 +351,6 @@ def main(page: ft.Page):
             nonlocal variante_rutina; variante_rutina += 1;
             master_container.content = view_combate(); page.update()
 
-        # Botones personalizados
         btn_refresh = IconBtn("refresh", WARNING_ORANGE, cambiar_rutina)
         btn_stop = IconBtn("stop_circle", DANGER_RED, stop_timer)
 
@@ -417,7 +418,6 @@ def main(page: ft.Page):
 
         def limpiar(e): tabla.rows.clear(); calc_totales()
 
-        # Botón de eliminar personalizado
         btn_eliminar = IconBtn("delete", DANGER_RED, limpiar)
 
         return ft.Column([
@@ -472,12 +472,11 @@ def main(page: ft.Page):
         ],
     )
     
-    # El botón lateral usa nuestro bloque impenetrable.
     btn_menu_lateral = IconBtn("menu", TEXT_WHITE, open_drawer_safe)
 
     app_bar = ft.AppBar(
         leading=btn_menu_lateral,
-        title=ft.Text("MAGI OS 5.7", color=TEXT_WHITE, font_family="Courier"),
+        title=ft.Text("MAGI OS 5.8", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
