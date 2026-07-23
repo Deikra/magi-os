@@ -77,16 +77,29 @@ LANG = {
 }
 
 def generar_pool_rutinas(meta_idx, eq_idx, cond):
+    # Condicionamiento viene de 1 a 5 (por el texto del nivel: ej. "3 - Intermedio" -> saca el '3')
     s_txt = "3x12" if cond < 3 else "4x15"
-    if eq_idx == 0: return [("CALISTENIA A", ["Push-ups", "Squats", "Plank", "Burpees"], s_txt), ("CALISTENIA B", ["Dips", "Lunges", "Crunches", "Jumping Jacks"], s_txt)]
-    elif eq_idx == 2: return [("GYM A", ["Bench Press", "Squats", "Lat Pulldown", "Cables"], s_txt), ("GYM B", ["Deadlift", "OHP", "Rows", "Leg Press"], s_txt)]
-    else: return [("HOME PESAS A", ["DB Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt), ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt)]
+    
+    # Asignación de cardio adaptativo basado en el nivel
+    if cond <= 2:
+        cardio = "CARDIO OPCIONAL: 10-15 min de caminata ligera o bici suave."
+    elif cond == 3:
+        cardio = "CARDIO OPCIONAL: 15-20 min de trote moderado o elíptica."
+    else:
+        cardio = "CARDIO OPCIONAL: 20 min de HIIT o carrera intensa."
+        
+    if eq_idx == 0: 
+        return [("CALISTENIA A", ["Push-ups", "Squats", "Plank", "Burpees"], s_txt, cardio), ("CALISTENIA B", ["Dips", "Lunges", "Crunches", "Jumping Jacks"], s_txt, cardio)]
+    elif eq_idx == 2: 
+        return [("GYM A", ["Bench Press", "Squats", "Lat Pulldown", "Cables"], s_txt, cardio), ("GYM B", ["Deadlift", "OHP", "Rows", "Leg Press"], s_txt, cardio)]
+    else: 
+        return [("HOME PESAS A", ["DB Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt, cardio), ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt, cardio)]
 
 def main(page: ft.Page):
     # ==========================================
     # CONFIGURACIÓN BASE DE LA PÁGINA
     # ==========================================
-    page.title = "MAGI OS 5.3"
+    page.title = "MAGI OS 5.4"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -149,10 +162,13 @@ def main(page: ft.Page):
             try:
                 peso = float(tf_peso.value); altura = float(tf_altura.value)
                 imc = peso / ((altura/100)**2)
+                # Obtenemos el número del nivel de acondicionamiento (ej. "3 - Intermedio" -> 3)
+                nivel_cond = int(dd_cond.value.split(" ")[0])
+                
                 app_data["perfil"] = {
                     "peso": peso, "altura": altura, "imc": imc,
                     "meta_idx": l["metas"].index(dd_meta.value), "equipo_idx": l["equipos"].index(dd_eq.value),
-                    "acondicionamiento": int(dd_cond.value[0]), "configurado": True
+                    "acondicionamiento": nivel_cond, "configurado": True
                 }
                 guardar_datos()
                 mostrar_alerta(f"{l['imc_res']} | IMC: {imc:.1f}", NEON_PURPLE)
@@ -245,7 +261,6 @@ def main(page: ft.Page):
         dd_filtro.on_change = actualizar_datos_estado
         actualizar_datos_estado()
 
-        # Fix V5.3: 'icon="save"' compatible con todas las versiones
         return ft.Column([
             ft.Row([tf_gl, dd_mom, ft.IconButton(icon="save", icon_color=NEON_PURPLE, on_click=guardar_gl)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             dd_filtro,
@@ -260,8 +275,10 @@ def main(page: ft.Page):
         eq = app_data["perfil"].get("equipo_idx", 1)
         cond = app_data["perfil"].get("acondicionamiento", 3)
         
+        # Desempacando la rutina con la recomendación de cardio
         rutinas = generar_pool_rutinas(meta, eq, cond)
-        titulo, ejercicios, series_txt = rutinas[variante_rutina % len(rutinas)]
+        titulo, ejercicios, series_txt, recomendacion_cardio = rutinas[variante_rutina % len(rutinas)]
+        
         num_series = int(series_txt.split('x')[0])
         total_checks = len(ejercicios) * num_series
         
@@ -309,9 +326,10 @@ def main(page: ft.Page):
             nonlocal variante_rutina; variante_rutina += 1;
             master_container.content = view_combate(); page.update()
 
-        # Fix V5.3: 'icon="refresh"' y 'icon="stop_circle"'
+        # Interfaz de combate con la advertencia de cardio incluida
         return ft.Column([
-            ft.Row([ft.Text(titulo, color=WARNING_ORANGE, size=20, weight="bold"), ft.IconButton(icon="refresh", on_click=cambiar_rutina)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([ft.Text(f"{titulo} ({series_txt})", color=WARNING_ORANGE, size=20, weight="bold"), ft.IconButton(icon="refresh", on_click=cambiar_rutina)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Text(recomendacion_cardio, color=NEON_PURPLE, size=12, italic=True, weight="bold"),
             lbl_sync, prog_bar,
             ft.Container(content=lista_ej, expand=True),
             ft.Container(content=ft.Column([
@@ -373,7 +391,6 @@ def main(page: ft.Page):
 
         def limpiar(e): tabla.rows.clear(); calc_totales()
 
-        # Fix V5.3: 'icon="delete"'
         return ft.Column([
             ft.Row([dd_mom, tf_alim]),
             ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), ft.IconButton(icon="delete", icon_color=DANGER_RED, on_click=limpiar)]),
@@ -406,7 +423,7 @@ def main(page: ft.Page):
         page.drawer.open = False
         show_main_interface()
 
-    # Fix V5.3: ft.Icon(name="...") para los iconos del menú
+    # Fix V5.4: Parámetros posicionales directos ft.Icon("...")
     drawer = ft.NavigationDrawer(
         on_change=navigate,
         bgcolor=SURFACE_COLOR,
@@ -419,15 +436,14 @@ def main(page: ft.Page):
             ft.NavigationDrawerDestination(icon="fitness_center", label="Combate"),
             ft.NavigationDrawerDestination(icon="battery_full", label="Energía"),
             ft.Divider(thickness=2, color=CARD_BG),
-            ft.ListTile(leading=ft.Icon(name="language", color=TEXT_WHITE), title=ft.Text("Language / Idioma"), on_click=toggle_lang),
-            ft.ListTile(leading=ft.Icon(name="settings", color=WARNING_ORANGE), title=ft.Text("Reconfigurar"), on_click=reset_app),
+            ft.ListTile(leading=ft.Icon("language", color=TEXT_WHITE), title=ft.Text("Language / Idioma"), on_click=toggle_lang),
+            ft.ListTile(leading=ft.Icon("settings", color=WARNING_ORANGE), title=ft.Text("Reconfigurar"), on_click=reset_app),
         ],
     )
     
-    # Fix V5.3: 'icon="menu"' 
     app_bar = ft.AppBar(
         leading=ft.IconButton(icon="menu", on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
-        title=ft.Text("MAGI OS 5.3", color=TEXT_WHITE, font_family="Courier"),
+        title=ft.Text("MAGI OS 5.4", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
