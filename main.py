@@ -86,13 +86,12 @@ def main(page: ft.Page):
     # ==========================================
     # CONFIGURACIÓN BASE DE LA PÁGINA
     # ==========================================
-    page.title = "MAGI OS 5.2"
+    page.title = "MAGI OS 5.3"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
     page.fonts = {"Consolas": "Consolas"}
     
-    # CONTENEDOR MAESTRO
     master_container = ft.Container(expand=True, padding=10)
     
     # ==========================================
@@ -246,9 +245,9 @@ def main(page: ft.Page):
         dd_filtro.on_change = actualizar_datos_estado
         actualizar_datos_estado()
 
-        # AQUÍ SE CORRIGIÓ EL BOTÓN DE GUARDAR
+        # Fix V5.3: 'icon="save"' compatible con todas las versiones
         return ft.Column([
-            ft.Row([tf_gl, dd_mom, ft.IconButton(icon=ft.icons.SAVE, icon_color=NEON_PURPLE, on_click=guardar_gl)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([tf_gl, dd_mom, ft.IconButton(icon="save", icon_color=NEON_PURPLE, on_click=guardar_gl)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             dd_filtro,
             ft.Container(content=chart_container, bgcolor=CARD_BG, border_radius=10, padding=10),
             ft.Container(content=historial_lista, expand=True, bgcolor=CARD_BG, border_radius=10, padding=10)
@@ -310,9 +309,9 @@ def main(page: ft.Page):
             nonlocal variante_rutina; variante_rutina += 1;
             master_container.content = view_combate(); page.update()
 
-        # AQUÍ SE CORRIGIERON LOS BOTONES REFRESH Y STOP
+        # Fix V5.3: 'icon="refresh"' y 'icon="stop_circle"'
         return ft.Column([
-            ft.Row([ft.Text(titulo, color=WARNING_ORANGE, size=20, weight="bold"), ft.IconButton(icon=ft.icons.REFRESH, on_click=cambiar_rutina)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([ft.Text(titulo, color=WARNING_ORANGE, size=20, weight="bold"), ft.IconButton(icon="refresh", on_click=cambiar_rutina)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             lbl_sync, prog_bar,
             ft.Container(content=lista_ej, expand=True),
             ft.Container(content=ft.Column([
@@ -320,7 +319,7 @@ def main(page: ft.Page):
                 ft.Row([
                     ft.ElevatedButton("90s", on_click=lambda e: start_timer(90), bgcolor=NEON_GREEN, color=BG_COLOR),
                     ft.ElevatedButton("120s", on_click=lambda e: start_timer(120), bgcolor=WARNING_ORANGE, color=BG_COLOR),
-                    ft.IconButton(icon=ft.icons.STOP_CIRCLE, icon_color=DANGER_RED, on_click=stop_timer)
+                    ft.IconButton(icon="stop_circle", icon_color=DANGER_RED, on_click=stop_timer)
                 ], alignment=ft.MainAxisAlignment.CENTER)
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER), bgcolor=CARD_BG, padding=10, border_radius=10)
         ], expand=True)
@@ -374,10 +373,10 @@ def main(page: ft.Page):
 
         def limpiar(e): tabla.rows.clear(); calc_totales()
 
-        # AQUÍ SE CORRIGIÓ EL BOTÓN DE DELETE
+        # Fix V5.3: 'icon="delete"'
         return ft.Column([
             ft.Row([dd_mom, tf_alim]),
-            ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), ft.IconButton(icon=ft.icons.DELETE, icon_color=DANGER_RED, on_click=limpiar)]),
+            ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), ft.IconButton(icon="delete", icon_color=DANGER_RED, on_click=limpiar)]),
             lbl_status,
             ft.Container(content=ft.Column([tabla], scroll=ft.ScrollMode.ALWAYS), expand=True, bgcolor=CARD_BG, border_radius=10),
             ft.Container(content=ft.Row([lbl_tot], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=10)
@@ -407,6 +406,7 @@ def main(page: ft.Page):
         page.drawer.open = False
         show_main_interface()
 
+    # Fix V5.3: ft.Icon(name="...") para los iconos del menú
     drawer = ft.NavigationDrawer(
         on_change=navigate,
         bgcolor=SURFACE_COLOR,
@@ -419,15 +419,15 @@ def main(page: ft.Page):
             ft.NavigationDrawerDestination(icon="fitness_center", label="Combate"),
             ft.NavigationDrawerDestination(icon="battery_full", label="Energía"),
             ft.Divider(thickness=2, color=CARD_BG),
-            ft.ListTile(leading=ft.Icon("language", color=TEXT_WHITE), title=ft.Text("Language / Idioma"), on_click=toggle_lang),
-            ft.ListTile(leading=ft.Icon("settings", color=WARNING_ORANGE), title=ft.Text("Reconfigurar"), on_click=reset_app),
+            ft.ListTile(leading=ft.Icon(name="language", color=TEXT_WHITE), title=ft.Text("Language / Idioma"), on_click=toggle_lang),
+            ft.ListTile(leading=ft.Icon(name="settings", color=WARNING_ORANGE), title=ft.Text("Reconfigurar"), on_click=reset_app),
         ],
     )
     
-    # AQUÍ SE CORRIGIÓ EL BOTÓN DEL MENÚ (APP BAR)
+    # Fix V5.3: 'icon="menu"' 
     app_bar = ft.AppBar(
-        leading=ft.IconButton(icon=ft.icons.MENU, on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
-        title=ft.Text("MAGI OS 5.2", color=TEXT_WHITE, font_family="Courier"),
+        leading=ft.IconButton(icon="menu", on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
+        title=ft.Text("MAGI OS 5.3", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
