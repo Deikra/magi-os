@@ -86,13 +86,13 @@ def main(page: ft.Page):
     # ==========================================
     # CONFIGURACIÓN BASE DE LA PÁGINA
     # ==========================================
-    page.title = "MAGI OS 5.0"
+    page.title = "MAGI OS 5.1"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
     page.fonts = {"Consolas": "Consolas"}
     
-    # El CONTENEDOR MAESTRO: Esto evita que la pantalla se ponga gris
+    # CONTENEDOR MAESTRO
     master_container = ft.Container(expand=True, padding=10)
     
     # ==========================================
@@ -106,7 +106,7 @@ def main(page: ft.Page):
             if memoria_guardada:
                 app_data = memoria_guardada
     except:
-        pass # Si falla en móvil, simplemente usa la memoria RAM temporal
+        pass 
         
     def guardar_datos():
         try:
@@ -114,7 +114,6 @@ def main(page: ft.Page):
         except:
             pass
             
-    # Cargar alimentos por defecto si no existen
     for lang in ["es", "en"]:
         for alim, vals in ALIMENTOS_OFFLINE[lang].items():
             if alim not in app_data["diccionario_magi"]:
@@ -124,8 +123,19 @@ def main(page: ft.Page):
     current_lang = "es"
     variante_rutina = 0
 
+    # ==========================================
+    # NOTIFICACIONES BLINDADAS (FIX V5.1)
+    # ==========================================
     def mostrar_alerta(texto, color=WARNING_ORANGE):
-        page.open(ft.SnackBar(content=ft.Text(texto, color=TEXT_WHITE), bgcolor=color))
+        sb = ft.SnackBar(content=ft.Text(texto, color=TEXT_WHITE), bgcolor=color)
+        try:
+            # Intenta usar el método moderno (Flet versiones nuevas)
+            page.open(sb)
+        except AttributeError:
+            # Si el método nuevo no existe en la APK, usa el clásico infalible
+            page.snack_bar = sb
+            page.snack_bar.open = True
+            page.update()
 
     # ==========================================
     # VISTAS (PANTALLAS INTERNAS)
@@ -415,11 +425,10 @@ def main(page: ft.Page):
     
     app_bar = ft.AppBar(
         leading=ft.IconButton("menu", on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
-        title=ft.Text("MAGI OS 5.0", color=TEXT_WHITE, font_family="Courier"),
+        title=ft.Text("MAGI OS 5.1", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
-    # FUNCIONES DE INYECCIÓN DE PANTALLA (Bypassan el sistema Views de Flet)
     def show_onboarding_interface():
         page.appbar = None
         page.drawer = None
@@ -435,10 +444,8 @@ def main(page: ft.Page):
     # ==========================================
     # ARRANQUE DE LA APLICACIÓN
     # ==========================================
-    # 1. Agregamos el contenedor a la página (Para evitar el freeze)
     page.add(master_container)
     
-    # 2. Inyectamos la pantalla correcta según si hay perfil guardado
     if app_data.get("perfil", {}).get("configurado", False):
         show_main_interface()
     else:
