@@ -89,25 +89,20 @@ def generar_pool_rutinas(meta_idx, eq_idx, cond):
     else: 
         return [("HOME PESAS A", ["DB Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt, cardio), ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt, cardio)]
 
-# ==========================================
-# SOLUCIÓN V5.9: BOTONES TÁCTILES UNICODE
-# Adiós al problema de los íconos que no cargan. 
-# Esto usará los símbolos nativos del sistema Android.
-# ==========================================
 def TacticalBtn(simbolo_texto, color, accion):
     return ft.Container(
         content=ft.Text(simbolo_texto, size=24, color=color),
         on_click=accion,
-        padding=15,          # Hace el botón más grande y fácil de tocar
-        ink=True,            # Efecto de onda al tocar la pantalla (Ripple effect)
-        border_radius=50     # Bordes redondeados para el área del toque
+        padding=15,          
+        ink=True,            
+        border_radius=50     
     )
 
 def main(page: ft.Page):
     # ==========================================
     # CONFIGURACIÓN BASE
     # ==========================================
-    page.title = "MAGI OS 5.9"
+    page.title = "MAGI OS 6.0"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -144,23 +139,80 @@ def main(page: ft.Page):
     variante_rutina = 0
 
     # ==========================================
-    # FUNCIONES SEGURAS DE MENÚ LATERAL
+    # SISTEMA DE NAVEGACIÓN BLINDADO V6.0
     # ==========================================
+    # Se le inyectan los emojis al texto para evitar fallos visuales.
+    drawer = ft.NavigationDrawer(
+        bgcolor=SURFACE_COLOR,
+        controls=[
+            ft.Container(height=20),
+            ft.Text("   MAGI OS TACTICAL", size=20, weight="bold", color=NEON_GREEN),
+            ft.Divider(thickness=2, color=CARD_BG),
+            ft.NavigationDrawerDestination(icon="lightbulb", label="💡 Mindset"),
+            ft.NavigationDrawerDestination(icon="water_drop", label="🩸 Estado"),
+            ft.NavigationDrawerDestination(icon="fitness_center", label="⚔️ Combate"),
+            ft.NavigationDrawerDestination(icon="battery_full", label="🔋 Energía"),
+            ft.Divider(thickness=2, color=CARD_BG),
+        ],
+    )
+
     def open_drawer_safe(e):
         try:
-            if page.drawer:
-                page.drawer.open = True
-                page.update()
+            page.open(drawer)  # Método para Flet moderno (0.22+)
         except Exception:
-            pass 
+            try:
+                page.drawer.open = True  # Método para versiones anteriores
+                page.update()
+            except Exception:
+                pass 
 
     def close_drawer_safe():
         try:
-            if page.drawer:
+            page.close(drawer)
+        except Exception:
+            try:
                 page.drawer.open = False
                 page.update()
+            except Exception:
+                pass
+
+    def navigate(e):
+        try:
+            idx = e.control.selected_index
+            if idx is not None:
+                if idx == 0: master_container.content = view_mindset()
+                elif idx == 1: master_container.content = view_estado()
+                elif idx == 2: master_container.content = view_combate()
+                elif idx == 3: master_container.content = view_energia()
+            page.update()
         except Exception:
-            pass
+            pass 
+        close_drawer_safe()
+
+    def reset_app(e):
+        app_data["perfil"]["configurado"] = False
+        guardar_datos()
+        close_drawer_safe()
+        show_onboarding_interface()
+
+    def toggle_lang(e):
+        nonlocal current_lang
+        current_lang = "en" if current_lang == "es" else "es"
+        close_drawer_safe()
+        show_main_interface()
+
+    # Añadimos las funciones a los botones del menú aquí para evitar errores
+    drawer.on_change = navigate
+    drawer.controls.append(ft.ListTile(title=ft.Text("🌍 Language / Idioma"), on_click=toggle_lang))
+    drawer.controls.append(ft.ListTile(title=ft.Text("⚙️ Reconfigurar"), on_click=reset_app))
+
+    btn_menu_lateral = TacticalBtn("☰", TEXT_WHITE, open_drawer_safe)
+
+    app_bar = ft.AppBar(
+        leading=btn_menu_lateral,
+        title=ft.Text("MAGI OS 6.0", color=TEXT_WHITE, font_family="Courier"),
+        bgcolor=CARD_BG,
+    )
 
     def mostrar_alerta(texto, color=WARNING_ORANGE):
         sb = ft.SnackBar(content=ft.Text(texto, color=TEXT_WHITE), bgcolor=color)
@@ -286,7 +338,6 @@ def main(page: ft.Page):
         dd_filtro.on_change = actualizar_datos_estado
         actualizar_datos_estado()
 
-        # Usando el nuevo botón con un emoji de diskette
         btn_guardar = TacticalBtn("💾", NEON_PURPLE, guardar_gl)
 
         return ft.Column([
@@ -353,7 +404,6 @@ def main(page: ft.Page):
             nonlocal variante_rutina; variante_rutina += 1;
             master_container.content = view_combate(); page.update()
 
-        # Emojis garantizados para no fallar
         btn_refresh = TacticalBtn("🔄", WARNING_ORANGE, cambiar_rutina)
         btn_stop = TacticalBtn("🛑", DANGER_RED, stop_timer)
 
@@ -421,7 +471,6 @@ def main(page: ft.Page):
 
         def limpiar(e): tabla.rows.clear(); calc_totales()
 
-        # Emoji de papelera para eliminar
         btn_eliminar = TacticalBtn("🗑️", DANGER_RED, limpiar)
 
         return ft.Column([
@@ -432,68 +481,23 @@ def main(page: ft.Page):
             ft.Container(content=ft.Row([lbl_tot], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=10)
         ], expand=True)
 
-    # ==========================================
-    # LÓGICA DE NAVEGACIÓN BLINDADA
-    # ==========================================
-    def navigate(e):
-        try:
-            idx = e.control.selected_index
-            if idx is not None:
-                if idx == 0: master_container.content = view_mindset()
-                elif idx == 1: master_container.content = view_estado()
-                elif idx == 2: master_container.content = view_combate()
-                elif idx == 3: master_container.content = view_energia()
-        except Exception:
-            pass 
-        close_drawer_safe()
-
-    def reset_app(e):
-        app_data["perfil"]["configurado"] = False
-        guardar_datos()
-        close_drawer_safe()
-        show_onboarding_interface()
-
-    def toggle_lang(e):
-        nonlocal current_lang
-        current_lang = "en" if current_lang == "es" else "es"
-        close_drawer_safe()
-        show_main_interface()
-
-    drawer = ft.NavigationDrawer(
-        on_change=navigate,
-        bgcolor=SURFACE_COLOR,
-        controls=[
-            ft.Container(height=20),
-            ft.Text("   MAGI OS TACTICAL", size=20, weight="bold", color=NEON_GREEN),
-            ft.Divider(thickness=2, color=CARD_BG),
-            ft.NavigationDrawerDestination(icon="lightbulb", label="Mindset"),
-            ft.NavigationDrawerDestination(icon="water_drop", label="Estado"),
-            ft.NavigationDrawerDestination(icon="fitness_center", label="Combate"),
-            ft.NavigationDrawerDestination(icon="battery_full", label="Energía"),
-            ft.Divider(thickness=2, color=CARD_BG),
-            ft.ListTile(leading=ft.Icon("language", color=TEXT_WHITE), title=ft.Text("Language / Idioma"), on_click=toggle_lang),
-            ft.ListTile(leading=ft.Icon("settings", color=WARNING_ORANGE), title=ft.Text("Reconfigurar"), on_click=reset_app),
-        ],
-    )
-    
-    # Símbolo universal de Menú "Hamburguesa" (Unicode)
-    btn_menu_lateral = TacticalBtn("☰", TEXT_WHITE, open_drawer_safe)
-
-    app_bar = ft.AppBar(
-        leading=btn_menu_lateral,
-        title=ft.Text("MAGI OS 5.9", color=TEXT_WHITE, font_family="Courier"),
-        bgcolor=CARD_BG,
-    )
 
     def show_onboarding_interface():
         page.appbar = None
-        page.drawer = None
+        try:
+            page.drawer = None
+        except:
+            pass
         master_container.content = build_onboarding()
         page.update()
 
     def show_main_interface():
         page.appbar = app_bar
-        page.drawer = drawer
+        # En caso de que se necesite anclar internamente para versiones viejas
+        try:
+            page.drawer = drawer
+        except Exception:
+            pass
         master_container.content = view_mindset()
         page.update()
 
