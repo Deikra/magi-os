@@ -86,7 +86,7 @@ def main(page: ft.Page):
     # ==========================================
     # CONFIGURACIÓN BASE DE LA PÁGINA
     # ==========================================
-    page.title = "MAGI OS 5.1"
+    page.title = "MAGI OS 5.2"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -124,15 +124,13 @@ def main(page: ft.Page):
     variante_rutina = 0
 
     # ==========================================
-    # NOTIFICACIONES BLINDADAS (FIX V5.1)
+    # NOTIFICACIONES BLINDADAS
     # ==========================================
     def mostrar_alerta(texto, color=WARNING_ORANGE):
         sb = ft.SnackBar(content=ft.Text(texto, color=TEXT_WHITE), bgcolor=color)
         try:
-            # Intenta usar el método moderno (Flet versiones nuevas)
             page.open(sb)
         except AttributeError:
-            # Si el método nuevo no existe en la APK, usa el clásico infalible
             page.snack_bar = sb
             page.snack_bar.open = True
             page.update()
@@ -248,8 +246,9 @@ def main(page: ft.Page):
         dd_filtro.on_change = actualizar_datos_estado
         actualizar_datos_estado()
 
+        # AQUÍ SE CORRIGIÓ EL BOTÓN DE GUARDAR
         return ft.Column([
-            ft.Row([tf_gl, dd_mom, ft.IconButton("save", icon_color=NEON_PURPLE, on_click=guardar_gl)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([tf_gl, dd_mom, ft.IconButton(icon=ft.icons.SAVE, icon_color=NEON_PURPLE, on_click=guardar_gl)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             dd_filtro,
             ft.Container(content=chart_container, bgcolor=CARD_BG, border_radius=10, padding=10),
             ft.Container(content=historial_lista, expand=True, bgcolor=CARD_BG, border_radius=10, padding=10)
@@ -311,8 +310,9 @@ def main(page: ft.Page):
             nonlocal variante_rutina; variante_rutina += 1;
             master_container.content = view_combate(); page.update()
 
+        # AQUÍ SE CORRIGIERON LOS BOTONES REFRESH Y STOP
         return ft.Column([
-            ft.Row([ft.Text(titulo, color=WARNING_ORANGE, size=20, weight="bold"), ft.IconButton("refresh", on_click=cambiar_rutina)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([ft.Text(titulo, color=WARNING_ORANGE, size=20, weight="bold"), ft.IconButton(icon=ft.icons.REFRESH, on_click=cambiar_rutina)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             lbl_sync, prog_bar,
             ft.Container(content=lista_ej, expand=True),
             ft.Container(content=ft.Column([
@@ -320,7 +320,7 @@ def main(page: ft.Page):
                 ft.Row([
                     ft.ElevatedButton("90s", on_click=lambda e: start_timer(90), bgcolor=NEON_GREEN, color=BG_COLOR),
                     ft.ElevatedButton("120s", on_click=lambda e: start_timer(120), bgcolor=WARNING_ORANGE, color=BG_COLOR),
-                    ft.IconButton("stop_circle", icon_color=DANGER_RED, on_click=stop_timer)
+                    ft.IconButton(icon=ft.icons.STOP_CIRCLE, icon_color=DANGER_RED, on_click=stop_timer)
                 ], alignment=ft.MainAxisAlignment.CENTER)
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER), bgcolor=CARD_BG, padding=10, border_radius=10)
         ], expand=True)
@@ -374,9 +374,10 @@ def main(page: ft.Page):
 
         def limpiar(e): tabla.rows.clear(); calc_totales()
 
+        # AQUÍ SE CORRIGIÓ EL BOTÓN DE DELETE
         return ft.Column([
             ft.Row([dd_mom, tf_alim]),
-            ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), ft.IconButton("delete", icon_color=DANGER_RED, on_click=limpiar)]),
+            ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), ft.IconButton(icon=ft.icons.DELETE, icon_color=DANGER_RED, on_click=limpiar)]),
             lbl_status,
             ft.Container(content=ft.Column([tabla], scroll=ft.ScrollMode.ALWAYS), expand=True, bgcolor=CARD_BG, border_radius=10),
             ft.Container(content=ft.Row([lbl_tot], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=10)
@@ -423,9 +424,10 @@ def main(page: ft.Page):
         ],
     )
     
+    # AQUÍ SE CORRIGIÓ EL BOTÓN DEL MENÚ (APP BAR)
     app_bar = ft.AppBar(
-        leading=ft.IconButton("menu", on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
-        title=ft.Text("MAGI OS 5.1", color=TEXT_WHITE, font_family="Courier"),
+        leading=ft.IconButton(icon=ft.icons.MENU, on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
+        title=ft.Text("MAGI OS 5.2", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
