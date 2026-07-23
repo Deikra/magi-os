@@ -77,16 +77,10 @@ LANG = {
 }
 
 def generar_pool_rutinas(meta_idx, eq_idx, cond):
-    # Condicionamiento viene de 1 a 5 (por el texto del nivel: ej. "3 - Intermedio" -> saca el '3')
     s_txt = "3x12" if cond < 3 else "4x15"
-    
-    # Asignación de cardio adaptativo basado en el nivel
-    if cond <= 2:
-        cardio = "CARDIO OPCIONAL: 10-15 min de caminata ligera o bici suave."
-    elif cond == 3:
-        cardio = "CARDIO OPCIONAL: 15-20 min de trote moderado o elíptica."
-    else:
-        cardio = "CARDIO OPCIONAL: 20 min de HIIT o carrera intensa."
+    if cond <= 2: cardio = "CARDIO OPCIONAL: 10-15 min de caminata ligera o bici."
+    elif cond == 3: cardio = "CARDIO OPCIONAL: 15-20 min de trote moderado."
+    else: cardio = "CARDIO OPCIONAL: 20 min de HIIT o carrera intensa."
         
     if eq_idx == 0: 
         return [("CALISTENIA A", ["Push-ups", "Squats", "Plank", "Burpees"], s_txt, cardio), ("CALISTENIA B", ["Dips", "Lunges", "Crunches", "Jumping Jacks"], s_txt, cardio)]
@@ -97,9 +91,9 @@ def generar_pool_rutinas(meta_idx, eq_idx, cond):
 
 def main(page: ft.Page):
     # ==========================================
-    # CONFIGURACIÓN BASE DE LA PÁGINA
+    # CONFIGURACIÓN BASE
     # ==========================================
-    page.title = "MAGI OS 5.4"
+    page.title = "MAGI OS 5.5"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -136,8 +130,24 @@ def main(page: ft.Page):
     variante_rutina = 0
 
     # ==========================================
-    # NOTIFICACIONES BLINDADAS
+    # FUNCIONES SEGURAS DE MENÚ LATERAL (NUEVO BLINDAJE V5.5)
     # ==========================================
+    def open_drawer_safe(e):
+        try:
+            if page.drawer:
+                page.drawer.open = True
+                page.update()
+        except Exception:
+            pass # Si falla, la app no se cierra
+
+    def close_drawer_safe():
+        try:
+            if page.drawer:
+                page.drawer.open = False
+                page.update()
+        except Exception:
+            pass
+
     def mostrar_alerta(texto, color=WARNING_ORANGE):
         sb = ft.SnackBar(content=ft.Text(texto, color=TEXT_WHITE), bgcolor=color)
         try:
@@ -162,7 +172,6 @@ def main(page: ft.Page):
             try:
                 peso = float(tf_peso.value); altura = float(tf_altura.value)
                 imc = peso / ((altura/100)**2)
-                # Obtenemos el número del nivel de acondicionamiento (ej. "3 - Intermedio" -> 3)
                 nivel_cond = int(dd_cond.value.split(" ")[0])
                 
                 app_data["perfil"] = {
@@ -275,7 +284,6 @@ def main(page: ft.Page):
         eq = app_data["perfil"].get("equipo_idx", 1)
         cond = app_data["perfil"].get("acondicionamiento", 3)
         
-        # Desempacando la rutina con la recomendación de cardio
         rutinas = generar_pool_rutinas(meta, eq, cond)
         titulo, ejercicios, series_txt, recomendacion_cardio = rutinas[variante_rutina % len(rutinas)]
         
@@ -326,7 +334,6 @@ def main(page: ft.Page):
             nonlocal variante_rutina; variante_rutina += 1;
             master_container.content = view_combate(); page.update()
 
-        # Interfaz de combate con la advertencia de cardio incluida
         return ft.Column([
             ft.Row([ft.Text(f"{titulo} ({series_txt})", color=WARNING_ORANGE, size=20, weight="bold"), ft.IconButton(icon="refresh", on_click=cambiar_rutina)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             ft.Text(recomendacion_cardio, color=NEON_PURPLE, size=12, italic=True, weight="bold"),
@@ -400,30 +407,32 @@ def main(page: ft.Page):
         ], expand=True)
 
     # ==========================================
-    # LÓGICA DE NAVEGACIÓN Y RENDERIZADO
+    # LÓGICA DE NAVEGACIÓN BLINDADA
     # ==========================================
     def navigate(e):
-        idx = e.control.selected_index
-        if idx == 0: master_container.content = view_mindset()
-        elif idx == 1: master_container.content = view_estado()
-        elif idx == 2: master_container.content = view_combate()
-        elif idx == 3: master_container.content = view_energia()
-        page.drawer.open = False
-        page.update()
+        try:
+            idx = e.control.selected_index
+            if idx is not None:
+                if idx == 0: master_container.content = view_mindset()
+                elif idx == 1: master_container.content = view_estado()
+                elif idx == 2: master_container.content = view_combate()
+                elif idx == 3: master_container.content = view_energia()
+        except Exception:
+            pass # Si por alguna razón el índice no carga, ignora el error
+        close_drawer_safe() # Siempre usa la función segura para cerrar
 
     def reset_app(e):
         app_data["perfil"]["configurado"] = False
         guardar_datos()
-        page.drawer.open = False
+        close_drawer_safe()
         show_onboarding_interface()
 
     def toggle_lang(e):
         nonlocal current_lang
         current_lang = "en" if current_lang == "es" else "es"
-        page.drawer.open = False
+        close_drawer_safe()
         show_main_interface()
 
-    # Fix V5.4: Parámetros posicionales directos ft.Icon("...")
     drawer = ft.NavigationDrawer(
         on_change=navigate,
         bgcolor=SURFACE_COLOR,
@@ -441,9 +450,10 @@ def main(page: ft.Page):
         ],
     )
     
+    # Asignación segura del botón de menú (open_drawer_safe)
     app_bar = ft.AppBar(
-        leading=ft.IconButton(icon="menu", on_click=lambda e: setattr(page.drawer, 'open', True) or page.update()),
-        title=ft.Text("MAGI OS 5.4", color=TEXT_WHITE, font_family="Courier"),
+        leading=ft.IconButton(icon="menu", on_click=open_drawer_safe),
+        title=ft.Text("MAGI OS 5.5", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
