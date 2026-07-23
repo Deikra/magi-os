@@ -89,11 +89,23 @@ def generar_pool_rutinas(meta_idx, eq_idx, cond):
     else: 
         return [("HOME PESAS A", ["DB Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt, cardio), ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt, cardio)]
 
+# ==========================================
+# SOLUCIÓN DE INGENIERÍA: BOTÓN PERSONALIZADO (IconBtn)
+# Bypassea por completo los errores de IconButton en la nube
+# ==========================================
+def IconBtn(icono, color, accion):
+    return ft.Container(
+        content=ft.Icon(icono, color=color),
+        on_click=accion,
+        padding=10, 
+        alignment=ft.alignment.center
+    )
+
 def main(page: ft.Page):
     # ==========================================
     # CONFIGURACIÓN BASE
     # ==========================================
-    page.title = "MAGI OS 5.6"
+    page.title = "MAGI OS 5.7"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -270,8 +282,8 @@ def main(page: ft.Page):
         dd_filtro.on_change = actualizar_datos_estado
         actualizar_datos_estado()
 
-        # BLINDAJE V5.6: content=ft.Icon(...)
-        btn_guardar = ft.IconButton(content=ft.Icon("save", color=NEON_PURPLE), on_click=guardar_gl)
+        # Usamos nuestro IconBtn personalizado en lugar del IconButton nativo
+        btn_guardar = IconBtn("save", NEON_PURPLE, guardar_gl)
 
         return ft.Column([
             ft.Row([tf_gl, dd_mom, btn_guardar], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
@@ -337,9 +349,9 @@ def main(page: ft.Page):
             nonlocal variante_rutina; variante_rutina += 1;
             master_container.content = view_combate(); page.update()
 
-        # BLINDAJE V5.6: content=ft.Icon(...)
-        btn_refresh = ft.IconButton(content=ft.Icon("refresh", color=WARNING_ORANGE), on_click=cambiar_rutina)
-        btn_stop = ft.IconButton(content=ft.Icon("stop_circle", color=DANGER_RED), on_click=stop_timer)
+        # Botones personalizados
+        btn_refresh = IconBtn("refresh", WARNING_ORANGE, cambiar_rutina)
+        btn_stop = IconBtn("stop_circle", DANGER_RED, stop_timer)
 
         return ft.Column([
             ft.Row([ft.Text(f"{titulo} ({series_txt})", color=WARNING_ORANGE, size=20, weight="bold"), btn_refresh], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
@@ -405,8 +417,8 @@ def main(page: ft.Page):
 
         def limpiar(e): tabla.rows.clear(); calc_totales()
 
-        # BLINDAJE V5.6: content=ft.Icon(...)
-        btn_eliminar = ft.IconButton(content=ft.Icon("delete", color=DANGER_RED), on_click=limpiar)
+        # Botón de eliminar personalizado
+        btn_eliminar = IconBtn("delete", DANGER_RED, limpiar)
 
         return ft.Column([
             ft.Row([dd_mom, tf_alim]),
@@ -460,16 +472,12 @@ def main(page: ft.Page):
         ],
     )
     
-    # EL BOTÓN DE MENÚ ABSOLUTAMENTE BLINDADO V5.6
-    # En lugar de usar icon="menu", le inyectamos el ícono como contenido visual.
-    btn_menu = ft.IconButton(
-        content=ft.Icon("menu", color=TEXT_WHITE), 
-        on_click=open_drawer_safe
-    )
+    # El botón lateral usa nuestro bloque impenetrable.
+    btn_menu_lateral = IconBtn("menu", TEXT_WHITE, open_drawer_safe)
 
     app_bar = ft.AppBar(
-        leading=btn_menu,
-        title=ft.Text("MAGI OS 5.6", color=TEXT_WHITE, font_family="Courier"),
+        leading=btn_menu_lateral,
+        title=ft.Text("MAGI OS 5.7", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
