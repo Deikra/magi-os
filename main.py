@@ -90,21 +90,24 @@ def generar_pool_rutinas(meta_idx, eq_idx, cond):
         return [("HOME PESAS A", ["DB Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt, cardio), ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt, cardio)]
 
 # ==========================================
-# SOLUCIÓN DE INGENIERÍA: BOTÓN PERSONALIZADO 
-# Libre del atributo alignment para no crashear en Android
+# SOLUCIÓN V5.9: BOTONES TÁCTILES UNICODE
+# Adiós al problema de los íconos que no cargan. 
+# Esto usará los símbolos nativos del sistema Android.
 # ==========================================
-def IconBtn(icono, color, accion):
+def TacticalBtn(simbolo_texto, color, accion):
     return ft.Container(
-        content=ft.Icon(icono, color=color),
+        content=ft.Text(simbolo_texto, size=24, color=color),
         on_click=accion,
-        padding=10
+        padding=15,          # Hace el botón más grande y fácil de tocar
+        ink=True,            # Efecto de onda al tocar la pantalla (Ripple effect)
+        border_radius=50     # Bordes redondeados para el área del toque
     )
 
 def main(page: ft.Page):
     # ==========================================
     # CONFIGURACIÓN BASE
     # ==========================================
-    page.title = "MAGI OS 5.8"
+    page.title = "MAGI OS 5.9"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -228,7 +231,6 @@ def main(page: ft.Page):
         dd_mom = ft.Dropdown(options=[ft.dropdown.Option(m) for m in l["gl_momentos"]], value=l["gl_momentos"][0], width=140, bgcolor=SURFACE_COLOR)
         dd_filtro = ft.Dropdown(options=[ft.dropdown.Option(m) for m in l["filtros_gl"]], value=l["filtros_gl"][0], width=140, bgcolor=SURFACE_COLOR)
         
-        # Eliminado el ft.alignment problemático
         chart_container = ft.Container(height=180) 
         historial_lista = ft.ListView(expand=True, spacing=5)
 
@@ -262,7 +264,6 @@ def main(page: ft.Page):
             if optimo > 0: sections.append(ft.PieChartSection(optimo, color=NEON_GREEN, radius=45, title="Óptimo"))
             if hiper > 0: sections.append(ft.PieChartSection(hiper, color=WARNING_ORANGE, radius=45, title="Hiper"))
             
-            # Usando un Row con MainAxisAlignment.CENTER como reemplazo blindado
             if sections: 
                 chart_container.content = ft.Row([ft.PieChart(sections=sections, sections_space=2, center_space_radius=30)], alignment=ft.MainAxisAlignment.CENTER)
             else: 
@@ -285,7 +286,8 @@ def main(page: ft.Page):
         dd_filtro.on_change = actualizar_datos_estado
         actualizar_datos_estado()
 
-        btn_guardar = IconBtn("save", NEON_PURPLE, guardar_gl)
+        # Usando el nuevo botón con un emoji de diskette
+        btn_guardar = TacticalBtn("💾", NEON_PURPLE, guardar_gl)
 
         return ft.Column([
             ft.Row([tf_gl, dd_mom, btn_guardar], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
@@ -351,8 +353,9 @@ def main(page: ft.Page):
             nonlocal variante_rutina; variante_rutina += 1;
             master_container.content = view_combate(); page.update()
 
-        btn_refresh = IconBtn("refresh", WARNING_ORANGE, cambiar_rutina)
-        btn_stop = IconBtn("stop_circle", DANGER_RED, stop_timer)
+        # Emojis garantizados para no fallar
+        btn_refresh = TacticalBtn("🔄", WARNING_ORANGE, cambiar_rutina)
+        btn_stop = TacticalBtn("🛑", DANGER_RED, stop_timer)
 
         return ft.Column([
             ft.Row([ft.Text(f"{titulo} ({series_txt})", color=WARNING_ORANGE, size=20, weight="bold"), btn_refresh], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
@@ -418,7 +421,8 @@ def main(page: ft.Page):
 
         def limpiar(e): tabla.rows.clear(); calc_totales()
 
-        btn_eliminar = IconBtn("delete", DANGER_RED, limpiar)
+        # Emoji de papelera para eliminar
+        btn_eliminar = TacticalBtn("🗑️", DANGER_RED, limpiar)
 
         return ft.Column([
             ft.Row([dd_mom, tf_alim]),
@@ -472,11 +476,12 @@ def main(page: ft.Page):
         ],
     )
     
-    btn_menu_lateral = IconBtn("menu", TEXT_WHITE, open_drawer_safe)
+    # Símbolo universal de Menú "Hamburguesa" (Unicode)
+    btn_menu_lateral = TacticalBtn("☰", TEXT_WHITE, open_drawer_safe)
 
     app_bar = ft.AppBar(
         leading=btn_menu_lateral,
-        title=ft.Text("MAGI OS 5.8", color=TEXT_WHITE, font_family="Courier"),
+        title=ft.Text("MAGI OS 5.9", color=TEXT_WHITE, font_family="Courier"),
         bgcolor=CARD_BG,
     )
 
