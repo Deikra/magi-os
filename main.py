@@ -102,12 +102,14 @@ def main(page: ft.Page):
     # ==========================================
     # CONFIGURACIÓN BASE
     # ==========================================
-    page.title = "MAGI OS 6.1"
+    page.title = "MAGI OS 6.2"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
+    page.spacing = 0
     page.fonts = {"Consolas": "Consolas"}
     
+    # Contenedor principal que se expandirá para ocupar todo el espacio posible
     master_container = ft.Container(expand=True, padding=10)
     
     # ==========================================
@@ -406,27 +408,40 @@ def main(page: ft.Page):
         ], expand=True)
 
     # ==========================================
-    # MANIOBRA V6.1: NAVEGACIÓN INFERIOR (BOTTOM NAV)
+    # MANIOBRA V6.2: MENÚ INFERIOR HECHO A MANO (Bulletproof)
+    # Reemplazamos la función nativa que nos daba errores por contenedores y botones básicos
     # ==========================================
-    def navigate_bottom(e):
-        idx = e.control.selected_index
+    def navigate_custom(idx):
         if idx == 0: master_container.content = view_mindset()
         elif idx == 1: master_container.content = view_estado()
         elif idx == 2: master_container.content = view_combate()
         elif idx == 3: master_container.content = view_energia()
         page.update()
 
-    # Este es el menú que estará siempre pegado abajo
-    bottom_nav = ft.NavigationBar(
-        selected_index=0,
-        on_change=navigate_bottom,
+    def CustomNavBtn(emoji, text, idx):
+        return ft.Container(
+            content=ft.Column([
+                ft.Text(emoji, size=22),
+                ft.Text(text, size=11, color=TEXT_WHITE, weight="bold")
+            ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=2),
+            on_click=lambda e: navigate_custom(idx),
+            expand=True,    # Esto asegura que todos los botones ocupen el mismo ancho
+            ink=True,       # Efecto de toque nativo
+            padding=ft.padding.symmetric(vertical=8)
+        )
+
+    # Este es el contenedor que hace el papel de "Barra Inferior"
+    bottom_nav = ft.Container(
+        content=ft.Row([
+            CustomNavBtn("💡", "Mindset", 0),
+            CustomNavBtn("🩸", "Estado", 1),
+            CustomNavBtn("⚔️", "Combate", 2),
+            CustomNavBtn("🔋", "Energía", 3),
+        ], alignment=ft.MainAxisAlignment.SPACE_AROUND, spacing=0),
         bgcolor=CARD_BG,
-        destinations=[
-            ft.NavigationBarDestination(icon_content=ft.Text("💡", size=22), label="Mindset"),
-            ft.NavigationBarDestination(icon_content=ft.Text("🩸", size=22), label="Estado"),
-            ft.NavigationBarDestination(icon_content=ft.Text("⚔️", size=22), label="Combate"),
-            ft.NavigationBarDestination(icon_content=ft.Text("🔋", size=22), label="Energía"),
-        ]
+        height=70,
+        margin=0,
+        padding=0
     )
 
     # ==========================================
@@ -442,9 +457,8 @@ def main(page: ft.Page):
         current_lang = "en" if current_lang == "es" else "es"
         show_main_interface()
 
-    # Movemos las opciones secundarias a la barra superior derecha
     app_bar = ft.AppBar(
-        title=ft.Text("MAGI OS 6.1", color=NEON_GREEN, weight="bold", size=18),
+        title=ft.Text("MAGI OS 6.2", color=NEON_GREEN, weight="bold", size=18),
         bgcolor=CARD_BG,
         actions=[
             TacticalBtn("🌍", TEXT_WHITE, toggle_lang),
@@ -454,22 +468,24 @@ def main(page: ft.Page):
 
     def show_onboarding_interface():
         page.appbar = None
-        page.navigation_bar = None  # Oculta el menú inferior
-        page.drawer = None          # Aseguramos que ya no haya rastros del menú lateral
+        bottom_nav.visible = False
         master_container.content = build_onboarding()
         page.update()
 
     def show_main_interface():
         page.appbar = app_bar
-        page.navigation_bar = bottom_nav  # Activa el menú inferior
-        page.drawer = None                
+        bottom_nav.visible = True
         master_container.content = view_mindset()
         page.update()
 
     # ==========================================
     # ARRANQUE DE LA APLICACIÓN
     # ==========================================
-    page.add(master_container)
+    # Agregamos todo directamente a la página: primero el área de trabajo y al final nuestro menú
+    page.add(
+        master_container,
+        bottom_nav
+    )
     
     if app_data.get("perfil", {}).get("configurado", False):
         show_main_interface()
