@@ -102,7 +102,7 @@ def main(page: ft.Page):
     # ==========================================
     # CONFIGURACIÓN BASE
     # ==========================================
-    page.title = "MAGI OS 6.2"
+    page.title = "MAGI OS 6.3"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -408,8 +408,8 @@ def main(page: ft.Page):
         ], expand=True)
 
     # ==========================================
-    # MANIOBRA V6.2: MENÚ INFERIOR HECHO A MANO (Bulletproof)
-    # Reemplazamos la función nativa que nos daba errores por contenedores y botones básicos
+    # MANIOBRA V6.3: MENÚ INFERIOR HECHO A MANO (Bulletproof)
+    # Reemplazamos ft.padding.symmetric por un padding numérico entero
     # ==========================================
     def navigate_custom(idx):
         if idx == 0: master_container.content = view_mindset()
@@ -425,12 +425,11 @@ def main(page: ft.Page):
                 ft.Text(text, size=11, color=TEXT_WHITE, weight="bold")
             ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=2),
             on_click=lambda e: navigate_custom(idx),
-            expand=True,    # Esto asegura que todos los botones ocupen el mismo ancho
-            ink=True,       # Efecto de toque nativo
-            padding=ft.padding.symmetric(vertical=8)
+            expand=True,    
+            ink=True,       
+            padding=10      # BLINDADO: El número entero 10 funciona en TODAS las versiones de Flet
         )
 
-    # Este es el contenedor que hace el papel de "Barra Inferior"
     bottom_nav = ft.Container(
         content=ft.Row([
             CustomNavBtn("💡", "Mindset", 0),
@@ -458,7 +457,7 @@ def main(page: ft.Page):
         show_main_interface()
 
     app_bar = ft.AppBar(
-        title=ft.Text("MAGI OS 6.2", color=NEON_GREEN, weight="bold", size=18),
+        title=ft.Text("MAGI OS 6.3", color=NEON_GREEN, weight="bold", size=18),
         bgcolor=CARD_BG,
         actions=[
             TacticalBtn("🌍", TEXT_WHITE, toggle_lang),
@@ -481,7 +480,6 @@ def main(page: ft.Page):
     # ==========================================
     # ARRANQUE DE LA APLICACIÓN
     # ==========================================
-    # Agregamos todo directamente a la página: primero el área de trabajo y al final nuestro menú
     page.add(
         master_container,
         bottom_nav
