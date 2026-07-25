@@ -1,5 +1,5 @@
 import flet as ft
-import datetime, random, requests, difflib, time, json, os
+import datetime, random, requests, difflib, time, json, os, threading
 
 # ==========================================
 # CONSTANTES Y COLORES EVA-01
@@ -14,8 +14,7 @@ DANGER_RED = "#EF4444"
 TEXT_WHITE = "#F8FAFC"
 TEXT_MUTED = "#94A3B8"        
 
-# Archivo de guardado de emergencia (Blindaje de Memoria Android)
-DATA_FILE = "magi_data_v7.json"
+DATA_FILE = "magi_data_v8.json"
 
 # ==========================================
 # CEREBRO MAGI Y DICCIONARIO
@@ -77,7 +76,6 @@ LANG = {
     }
 }
 
-# ARSENAL EXPANDIDO (Variedades A, B, C y D)
 def generar_pool_rutinas(meta_idx, eq_idx, cond):
     s_txt = "3x12" if cond < 3 else "4x15"
     if cond <= 2: cardio = "CARDIO OPCIONAL: 10-15 min de caminata."
@@ -106,7 +104,7 @@ def TacticalBtn(simbolo_texto, color, accion):
     )
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 7.0"
+    page.title = "MAGI OS 8.0"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -118,9 +116,6 @@ def main(page: ft.Page):
     current_lang = "es"
     variante_rutina = 0
     
-    # ==========================================
-    # SISTEMA DE MEMORIA BLINDADO (DUAL SAVE)
-    # ==========================================
     app_data = {"perfil": {"configurado": False}, "glicemias": [], "diccionario_magi": {}}
     
     def cargar_datos():
@@ -139,7 +134,6 @@ def main(page: ft.Page):
                         app_data = json.load(f)
             except: pass
 
-        # Asegurar diccionario offline por si acaso
         for lang in ["es", "en"]:
             for alim, vals in ALIMENTOS_OFFLINE[lang].items():
                 if alim not in app_data["diccionario_magi"]:
@@ -188,7 +182,6 @@ def main(page: ft.Page):
 
         def procesar_perfil(e):
             try:
-                # El blindaje maestro de la coma
                 peso = float(tf_peso.value.replace(',', '.'))
                 altura = float(tf_altura.value.replace(',', '.'))
                 imc = peso / ((altura/100)**2)
@@ -237,7 +230,7 @@ def main(page: ft.Page):
         dd_mom = ft.Dropdown(options=[ft.dropdown.Option(m) for m in l["gl_momentos"]], value=l["gl_momentos"][0], width=140, bgcolor=SURFACE_COLOR)
         dd_filtro = ft.Dropdown(options=[ft.dropdown.Option(m) for m in l["filtros_gl"]], value=l["filtros_gl"][0], width=140, bgcolor=SURFACE_COLOR)
         
-        chart_container = ft.Container(height=180) 
+        chart_container = ft.Container(height=80, padding=5) 
         historial_lista = ft.ListView(expand=True, spacing=5)
 
         def actualizar_datos_estado(e=None):
@@ -261,17 +254,26 @@ def main(page: ft.Page):
                                 subtitle=ft.Text(f"{r['fecha']} {r['hora']} | {r['momento']}", color=TEXT_MUTED))
                 )
 
+            # MANIOBRA V8.0: BARRA DE PROPORCIÓN EN LUGAR DE PIECHART
             hipo = sum(1 for d in datos_filtrados if d["valor"] < 80)
             optimo = sum(1 for d in datos_filtrados if 80 <= d["valor"] <= 140)
             hiper = sum(1 for d in datos_filtrados if d["valor"] > 140)
+            total = hipo + optimo + hiper
             
-            sections = []
-            if hipo > 0: sections.append(ft.PieChartSection(hipo, color=DANGER_RED, radius=45, title="Hipo"))
-            if optimo > 0: sections.append(ft.PieChartSection(optimo, color=NEON_GREEN, radius=45, title="Óptimo"))
-            if hiper > 0: sections.append(ft.PieChartSection(hiper, color=WARNING_ORANGE, radius=45, title="Hiper"))
-            
-            if sections: 
-                chart_container.content = ft.Row([ft.PieChart(sections=sections, sections_space=2, center_space_radius=30)], alignment=ft.MainAxisAlignment.CENTER)
+            if total > 0:
+                barras = []
+                if hipo > 0: barras.append(ft.Container(bgcolor=DANGER_RED, height=15, expand=hipo))
+                if optimo > 0: barras.append(ft.Container(bgcolor=NEON_GREEN, height=15, expand=optimo))
+                if hiper > 0: barras.append(ft.Container(bgcolor=WARNING_ORANGE, height=15, expand=hiper))
+                
+                chart_container.content = ft.Column([
+                    ft.Row(barras, spacing=0, border_radius=5),
+                    ft.Row([
+                        ft.Text(f"Hipo: {hipo}", color=DANGER_RED, size=12),
+                        ft.Text(f"Ópt: {optimo}", color=NEON_GREEN, size=12),
+                        ft.Text(f"Hiper: {hiper}", color=WARNING_ORANGE, size=12),
+                    ], alignment=ft.MainAxisAlignment.SPACE_AROUND)
+                ], alignment=ft.MainAxisAlignment.CENTER)
             else: 
                 chart_container.content = ft.Row([ft.Text("Sin datos", color=TEXT_MUTED)], alignment=ft.MainAxisAlignment.CENTER)
                 
@@ -279,7 +281,6 @@ def main(page: ft.Page):
 
         def guardar_gl(e):
             try:
-                # Blindaje de la coma en glicemia
                 val = float(tf_gl.value.replace(',', '.'))
                 estado = "Hipo" if val < 80 else ("Óptimo" if val <= 140 else "Hiper")
                 ahora = datetime.datetime.now()
@@ -288,7 +289,7 @@ def main(page: ft.Page):
                 tf_gl.value = ""
                 actualizar_datos_estado()
                 mostrar_alerta("Dato Glucémico Guardado", NEON_GREEN)
-            except Exception as ex: 
+            except Exception: 
                 mostrar_alerta(l["alerta_val"], DANGER_RED)
 
         dd_filtro.on_change = actualizar_datos_estado
@@ -335,7 +336,7 @@ def main(page: ft.Page):
         txt_timer = ft.Text("00:00", size=35, weight="bold", color=TEXT_WHITE, font_family="Consolas")
         timer_running = False
 
-        # CRONÓMETRO BLINDADO: Evita crashear si cambias de pestaña
+        # MANIOBRA V8.0: CRONÓMETRO BASADO EN THREADING PURO (Inmune al error "coroutine")
         def run_timer(segundos):
             nonlocal timer_running
             timer_running = False
@@ -348,9 +349,8 @@ def main(page: ft.Page):
                 try:
                     txt_timer.value = f"{mins:02d}:{secs:02d}"
                     txt_timer.color = TEXT_WHITE
-                    txt_timer.update() # Solo actualiza el texto, no toda la página
+                    txt_timer.update() 
                 except Exception:
-                    # Si falla es porque cambiaste de pestaña y el texto ya no existe. Salimos en silencio.
                     break
                 time.sleep(1)
             
@@ -360,7 +360,10 @@ def main(page: ft.Page):
                     txt_timer.update()
             except: pass
 
-        def start_timer(s): page.run_task(run_timer, s)
+        def start_timer(s): 
+            # Iniciar hilo en segundo plano compatible con cualquier Flet/Python
+            threading.Thread(target=run_timer, args=(s,), daemon=True).start()
+            
         def stop_timer(e): 
             nonlocal timer_running
             timer_running = False
@@ -398,21 +401,29 @@ def main(page: ft.Page):
         tf_gr = ft.TextField(label=l["gramos"], width=80, keyboard_type=ft.KeyboardType.NUMBER, bgcolor=SURFACE_COLOR)
         lbl_status = ft.Text("", size=10, color=TEXT_MUTED)
         
-        tabla = ft.DataTable(
-            columns=[ft.DataColumn(ft.Text("Alimento")), ft.DataColumn(ft.Text("Cat.")), ft.DataColumn(ft.Text("C/K"))],
-            rows=[]
-        )
+        # MANIOBRA V8.0: LISTA INFALIBLE EN VEZ DE DATATABLE CON BUGS VISUALES
+        lista_comidas = ft.ListView(expand=True, spacing=5)
+        registro_actual = [] # Guarda temporalmente la comida del momento
+        
         lbl_tot = ft.Text("C: 0g | K: 0kcal", color=NEON_GREEN, weight="bold", size=16)
 
-        def calc_totales():
+        def actualizar_pantalla_energia():
+            lista_comidas.controls.clear()
             tc = tk = 0.0
-            for r in tabla.rows:
-                vals = r.cells[2].content.value.split("/")
-                tc += float(vals[0]); tk += float(vals[1])
+            for item in registro_actual:
+                tc += item["c"]
+                tk += item["k"]
+                lista_comidas.controls.append(
+                    ft.Container(
+                        content=ft.Row([
+                            ft.Text(item["alim"].capitalize(), expand=True, color=TEXT_WHITE),
+                            ft.Text(f"C: {item['c']:.1f}g | K: {item['k']:.1f}", color=NEON_PURPLE, weight="bold")
+                        ]), bgcolor=SURFACE_COLOR, padding=10, border_radius=8
+                    )
+                )
             lbl_tot.value = f"C: {tc:.1f}g | K: {tk:.1f}kcal"
             page.update()
 
-        # ================== MENÚ ENSEÑAR A MAGI ==================
         tf_new_carbs = ft.TextField(label="Carbs/100g", keyboard_type=ft.KeyboardType.NUMBER, width=120, bgcolor=SURFACE_COLOR)
         tf_new_kcal = ft.TextField(label="Kcal/100g", keyboard_type=ft.KeyboardType.NUMBER, width=120, bgcolor=SURFACE_COLOR)
         
@@ -425,7 +436,7 @@ def main(page: ft.Page):
                 guardar_datos()
                 close_dialog_safe(dlg_new_food)
                 mostrar_alerta("MAGI ha aprendido un nuevo alimento", NEON_GREEN)
-                add_food(None) # Reintenta agregar
+                add_food(None) 
             except:
                 mostrar_alerta("Ingresa números válidos", DANGER_RED)
 
@@ -445,7 +456,6 @@ def main(page: ft.Page):
             alim_raw = tf_alim.value.lower().strip()
             if not alim_raw: return
             try: 
-                # Blindaje de la coma para los gramos
                 gr = float(tf_gr.value.replace(',', '.'))
             except: 
                 mostrar_alerta(l["alerta_val"], DANGER_RED); return
@@ -459,23 +469,23 @@ def main(page: ft.Page):
                     alim_final = matches[0]
                     lbl_status.value = f"Fuzzy: '{alim_raw}' ➔ '{alim_final}'"
                 else:
-                    # SI NO LO ENCUENTRA, ABRE EL DIÁLOGO PARA ENSEÑARLE
                     tf_new_carbs.value = ""
                     tf_new_kcal.value = ""
                     open_dialog_safe(dlg_new_food)
                     return
             
             if alim_final in dic:
-                c100 = dic[alim_final]["carbs"]; k100 = dic[alim_final]["kcal"]; cat = dic[alim_final].get("cat", "Otro")
-                tabla.rows.append(ft.DataRow(cells=[
-                    ft.DataCell(ft.Text(alim_final.capitalize())),
-                    ft.DataCell(ft.Text(cat, size=10)),
-                    ft.DataCell(ft.Text(f"{(gr*c100)/100:.1f}/{(gr*k100)/100:.1f}"))
-                ]))
+                c100 = dic[alim_final]["carbs"]; k100 = dic[alim_final]["kcal"]
+                c_calc = (gr*c100)/100
+                k_calc = (gr*k100)/100
+                
+                registro_actual.append({"alim": alim_final, "c": c_calc, "k": k_calc})
                 tf_alim.value = ""; tf_gr.value = ""
-                calc_totales()
+                actualizar_pantalla_energia()
 
-        def limpiar(e): tabla.rows.clear(); calc_totales()
+        def limpiar(e): 
+            registro_actual.clear()
+            actualizar_pantalla_energia()
 
         btn_eliminar = TacticalBtn("🗑️", DANGER_RED, limpiar)
 
@@ -483,12 +493,12 @@ def main(page: ft.Page):
             ft.Row([dd_mom, tf_alim]),
             ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), btn_eliminar]),
             lbl_status,
-            ft.Container(content=ft.Column([tabla], scroll=ft.ScrollMode.ALWAYS), expand=True, bgcolor=CARD_BG, border_radius=10),
+            ft.Container(content=lista_comidas, expand=True, bgcolor=CARD_BG, border_radius=10, padding=10),
             ft.Container(content=ft.Row([lbl_tot], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=10)
         ], expand=True)
 
     # ==========================================
-    # MANIOBRA V7.0: ACTUALIZACIÓN DINÁMICA DE NAVEGACIÓN
+    # MANIOBRA NAVEGACIÓN
     # ==========================================
     def navigate_custom(idx):
         nonlocal current_view_idx
@@ -508,7 +518,6 @@ def main(page: ft.Page):
             on_click=lambda e: navigate_custom(idx), expand=True, ink=True, padding=10      
         )
 
-    # Contenedor vacío que rellenaremos según el idioma
     bottom_nav = ft.Container(bgcolor=CARD_BG, height=70, margin=0, padding=0)
 
     def reset_app(e):
@@ -519,7 +528,7 @@ def main(page: ft.Page):
     def toggle_lang(e):
         nonlocal current_lang
         current_lang = "en" if current_lang == "es" else "es"
-        show_main_interface() # Reconstruye toda la interfaz con el nuevo idioma
+        show_main_interface() 
 
     def show_onboarding_interface():
         page.appbar = None
@@ -528,8 +537,7 @@ def main(page: ft.Page):
         page.update()
 
     def show_main_interface():
-        # Reconstruimos AppBar y Nav según el idioma activo
-        titulo_app = "MAGI OS 7.0 (EN)" if current_lang == "en" else "MAGI OS 7.0 (ES)"
+        titulo_app = "MAGI OS 8.0 (EN)" if current_lang == "en" else "MAGI OS 8.0 (ES)"
         page.appbar = ft.AppBar(
             title=ft.Text(titulo_app, color=NEON_GREEN, weight="bold", size=18),
             bgcolor=CARD_BG,
@@ -552,7 +560,6 @@ def main(page: ft.Page):
         ], alignment=ft.MainAxisAlignment.SPACE_AROUND, spacing=0)
         
         bottom_nav.visible = True
-        # Vamos a la pestaña en la que estábamos
         navigate_custom(current_view_idx)
 
     # ==========================================
