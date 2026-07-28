@@ -14,7 +14,7 @@ DANGER_RED = "#EF4444"
 TEXT_WHITE = "#F8FAFC"
 TEXT_MUTED = "#94A3B8"        
 
-DATA_FILE = "magi_data_v8.json"
+DATA_FILE = "magi_data_v9.json"
 
 # ==========================================
 # CEREBRO MAGI Y DICCIONARIO
@@ -76,27 +76,46 @@ LANG = {
     }
 }
 
-def generar_pool_rutinas(meta_idx, eq_idx, cond):
+# ==========================================
+# RUTINAS POR DÍA DE LA SEMANA
+# ==========================================
+def generar_rutina_del_dia(eq_idx, cond, dia_idx):
     s_txt = "3x12" if cond < 3 else "4x15"
-    if cond <= 2: cardio = "CARDIO OPCIONAL: 10-15 min de caminata."
-    elif cond == 3: cardio = "CARDIO OPCIONAL: 15-20 min de trote."
-    else: cardio = "CARDIO OPCIONAL: 20 min de HIIT."
+    cardio = "CARDIO OPCIONAL: 15-20 min." if cond >= 3 else "CARDIO OPCIONAL: 10 min."
         
     if eq_idx == 0: 
-        return [("CALISTENIA A", ["Push-ups", "Squats", "Plank", "Burpees"], s_txt, cardio), 
-                ("CALISTENIA B", ["Dips", "Lunges", "Crunches", "Jumping Jacks"], s_txt, cardio),
-                ("CALISTENIA C", ["Pike Push-ups", "Bulgarian Squats", "Hollow Body", "Mountain Climbers"], s_txt, cardio),
-                ("CALISTENIA D", ["Diamond Push-ups", "Glute Bridges", "Side Plank", "High Knees"], s_txt, cardio)]
+        rutinas = [
+            ("LUNES: EMPUJE", ["Push-ups", "Dips (o en Silla)", "Pike Push-ups", "Plank Posición Alta"]),
+            ("MARTES: TIRÓN Y CORE", ["Pull-ups (o Remos invertidos)", "Hollow Body", "Superman", "Mountain Climbers"]),
+            ("MIÉRCOLES: PIERNAS", ["Squats Libres", "Lunges Alternos", "Glute Bridges", "Elevación de Pantorrillas"]),
+            ("JUEVES: DESCANSO ACTIVO", ["Estiramiento Completo", "Caminata de 30 min", "Yoga Básico", "Rotación Articular"]),
+            ("VIERNES: FULL BODY", ["Push-ups", "Squats", "Burpees", "Jumping Jacks"]),
+            ("SÁBADO: HIIT CALISTENIA", ["High Knees (30s)", "Jumping Jacks (30s)", "Burpees (30s)", "Plank (30s)"]),
+            ("DOMINGO: RECUPERACIÓN", ["Día Libre", "Masaje/Foam Roller", "Hidratación Profunda", "Preparación Semanal"])
+        ]
     elif eq_idx == 2: 
-        return [("GYM A", ["Bench Press", "Squats", "Lat Pulldown", "Cables"], s_txt, cardio), 
-                ("GYM B", ["Deadlift", "OHP", "Rows", "Leg Press"], s_txt, cardio),
-                ("GYM C", ["Incline Press", "Leg Extensions", "Seated Row", "Bicep Curls"], s_txt, cardio),
-                ("GYM D", ["Hack Squat", "Pull-ups (Ass)", "Tricep Pushdown", "Face Pulls"], s_txt, cardio)]
+        rutinas = [
+            ("LUNES: PECHO Y TRÍCEPS", ["Bench Press", "Incline DB Press", "Tricep Pushdown (Cables)", "Pec Deck"]),
+            ("MARTES: ESPALDA Y BÍCEPS", ["Lat Pulldown", "Seated Cable Row", "Barbell Bicep Curl", "Face Pulls"]),
+            ("MIÉRCOLES: PIERNAS", ["Barbell Squats", "Leg Press", "Leg Extensions", "Calf Raises"]),
+            ("JUEVES: HOMBROS Y CORE", ["Overhead Press", "Lateral Raises", "Cable Crunches", "Plank con Peso"]),
+            ("VIERNES: FULL BODY (GYM)", ["Deadlift", "Leg Press", "Chest Press Machine", "Cable Rows"]),
+            ("SÁBADO: CARDIO Y ABS", ["Cinta/Treadmill 20m", "Bici Estática 15m", "Hanging Leg Raises", "Crunches"]),
+            ("DOMINGO: DESCANSO", ["Recuperación", "Sauna/Masaje", "Caminata Ligera", "Descanso Total"])
+        ]
     else: 
-        return [("HOME PESAS A", ["DB Floor Press", "Goblet Squat", "DB Row", "Thrusters"], s_txt, cardio), 
-                ("HOME PESAS B", ["DB RDL", "Arnold Press", "Lunges", "Swings"], s_txt, cardio),
-                ("HOME PESAS C", ["Push-ups", "Front Squat", "Renegade Row", "Lateral Raises"], s_txt, cardio),
-                ("HOME PESAS D", ["Sumo Deadlift", "Push Press", "DB Pullover", "Hammer Curls"], s_txt, cardio)]
+        rutinas = [
+            ("LUNES: EMPUJE CON PESAS", ["DB Floor Press", "DB Push Press", "Lateral Raises", "Overhead Triceps"]),
+            ("MARTES: TIRÓN CON PESAS", ["DB Row a una mano", "DB Pullover", "Hammer Curls", "Renegade Row"]),
+            ("MIÉRCOLES: PIERNAS (HOME)", ["Goblet Squat", "DB RDL (Peso Muerto)", "Lunges con Mancuernas", "Calf Raises"]),
+            ("JUEVES: CORE ACTIVO", ["Sit-ups", "Russian Twists con DB", "Plank Estricto", "Leg Raises"]),
+            ("VIERNES: FULL BODY", ["Thrusters (Sentadilla + Press)", "DB Swings", "Squat to Press", "Man Makers"]),
+            ("SÁBADO: HIIT CASERO", ["Burpees", "DB Snatches", "Jumping Jacks", "Shadow Boxing con Peso"]),
+            ("DOMINGO: DESCANSO", ["Descanso Activo", "Estiramientos", "Caminata al Aire Libre", "Recuperación"])
+        ]
+
+    titulo, ejs = rutinas[dia_idx % 7]
+    return titulo, ejs, s_txt, cardio
 
 def TacticalBtn(simbolo_texto, color, accion):
     return ft.Container(
@@ -104,17 +123,21 @@ def TacticalBtn(simbolo_texto, color, accion):
     )
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 8.0"
+    page.title = "MAGI OS 9.0"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
     page.spacing = 0
     page.fonts = {"Consolas": "Consolas"}
     
+    # SONIDO DEL CRONÓMETRO INYECTADO
+    audio_alarm = ft.Audio(src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg", autoplay=False)
+    page.overlay.append(audio_alarm)
+    
     master_container = ft.Container(expand=True, padding=10)
     current_view_idx = 0
     current_lang = "es"
-    variante_rutina = 0
+    variante_rutina = 0 # Usado ahora para "adelantar" de día si el usuario lo desea
     
     app_data = {"perfil": {"configurado": False}, "glicemias": [], "diccionario_magi": {}}
     
@@ -254,7 +277,6 @@ def main(page: ft.Page):
                                 subtitle=ft.Text(f"{r['fecha']} {r['hora']} | {r['momento']}", color=TEXT_MUTED))
                 )
 
-            # MANIOBRA V8.0: BARRA DE PROPORCIÓN EN LUGAR DE PIECHART
             hipo = sum(1 for d in datos_filtrados if d["valor"] < 80)
             optimo = sum(1 for d in datos_filtrados if 80 <= d["valor"] <= 140)
             hiper = sum(1 for d in datos_filtrados if d["valor"] > 140)
@@ -266,8 +288,9 @@ def main(page: ft.Page):
                 if optimo > 0: barras.append(ft.Container(bgcolor=NEON_GREEN, height=15, expand=optimo))
                 if hiper > 0: barras.append(ft.Container(bgcolor=WARNING_ORANGE, height=15, expand=hiper))
                 
+                # BUG DEL ROW CORREGIDO: Eliminamos el border_radius de ft.Row para evitar el crash
                 chart_container.content = ft.Column([
-                    ft.Row(barras, spacing=0, border_radius=5),
+                    ft.Container(content=ft.Row(barras, spacing=0), border_radius=5, clip_behavior=ft.ClipBehavior.HARD_EDGE),
                     ft.Row([
                         ft.Text(f"Hipo: {hipo}", color=DANGER_RED, size=12),
                         ft.Text(f"Ópt: {optimo}", color=NEON_GREEN, size=12),
@@ -306,12 +329,15 @@ def main(page: ft.Page):
     def view_combate():
         nonlocal variante_rutina
         l = LANG[current_lang]
-        meta = app_data["perfil"].get("meta_idx", 0)
         eq = app_data["perfil"].get("equipo_idx", 1)
         cond = app_data["perfil"].get("acondicionamiento", 3)
         
-        rutinas = generar_pool_rutinas(meta, eq, cond)
-        titulo, ejercicios, series_txt, recomendacion_cardio = rutinas[variante_rutina % len(rutinas)]
+        # EL NÚCLEO AHORA LEE EL DÍA DE LA SEMANA REAL (0=Lunes, 6=Domingo)
+        dia_semana_actual = datetime.datetime.today().weekday()
+        # variante_rutina sirve para "adelantar" de día si presionas el botón de refrescar
+        dia_calculado = dia_semana_actual + variante_rutina
+        
+        titulo, ejercicios, series_txt, recomendacion_cardio = generar_rutina_del_dia(eq, cond, dia_calculado)
         
         num_series = int(series_txt.split('x')[0])
         total_checks = len(ejercicios) * num_series
@@ -336,7 +362,6 @@ def main(page: ft.Page):
         txt_timer = ft.Text("00:00", size=35, weight="bold", color=TEXT_WHITE, font_family="Consolas")
         timer_running = False
 
-        # MANIOBRA V8.0: CRONÓMETRO BASADO EN THREADING PURO (Inmune al error "coroutine")
         def run_timer(segundos):
             nonlocal timer_running
             timer_running = False
@@ -358,10 +383,11 @@ def main(page: ft.Page):
                 if timer_running: 
                     txt_timer.color = DANGER_RED
                     txt_timer.update()
+                    # SONIDO AL TERMINAR EL CRONÓMETRO
+                    audio_alarm.play() 
             except: pass
 
         def start_timer(s): 
-            # Iniciar hilo en segundo plano compatible con cualquier Flet/Python
             threading.Thread(target=run_timer, args=(s,), daemon=True).start()
             
         def stop_timer(e): 
@@ -373,6 +399,7 @@ def main(page: ft.Page):
             except: pass
         
         def cambiar_rutina(e):
+            # Ahora adelanta la rutina al siguiente día
             nonlocal variante_rutina; variante_rutina += 1;
             master_container.content = view_combate(); page.update()
 
@@ -401,9 +428,8 @@ def main(page: ft.Page):
         tf_gr = ft.TextField(label=l["gramos"], width=80, keyboard_type=ft.KeyboardType.NUMBER, bgcolor=SURFACE_COLOR)
         lbl_status = ft.Text("", size=10, color=TEXT_MUTED)
         
-        # MANIOBRA V8.0: LISTA INFALIBLE EN VEZ DE DATATABLE CON BUGS VISUALES
         lista_comidas = ft.ListView(expand=True, spacing=5)
-        registro_actual = [] # Guarda temporalmente la comida del momento
+        registro_actual = [] 
         
         lbl_tot = ft.Text("C: 0g | K: 0kcal", color=NEON_GREEN, weight="bold", size=16)
 
@@ -432,10 +458,12 @@ def main(page: ft.Page):
                 c = float(tf_new_carbs.value.replace(',', '.'))
                 k = float(tf_new_kcal.value.replace(',', '.'))
                 alim_raw = tf_alim.value.lower().strip()
+                if not alim_raw: alim_raw = "Nuevo Alimento"
                 app_data["diccionario_magi"][alim_raw] = {"carbs": c, "kcal": k, "cat": "Personal"}
                 guardar_datos()
                 close_dialog_safe(dlg_new_food)
                 mostrar_alerta("MAGI ha aprendido un nuevo alimento", NEON_GREEN)
+                tf_alim.value = alim_raw # Lo pone en la barra para añadir
                 add_food(None) 
             except:
                 mostrar_alerta("Ingresa números válidos", DANGER_RED)
@@ -443,7 +471,7 @@ def main(page: ft.Page):
         dlg_new_food = ft.AlertDialog(
             title=ft.Text("ENSEÑAR A MAGI", color=NEON_PURPLE),
             content=ft.Column([
-                ft.Text("Alimento no encontrado. Ingresa sus macros por cada 100g:"),
+                ft.Text("Ingresa los macros por cada 100g:"),
                 ft.Row([tf_new_carbs, tf_new_kcal])
             ], height=120),
             actions=[
@@ -487,11 +515,18 @@ def main(page: ft.Page):
             registro_actual.clear()
             actualizar_pantalla_energia()
 
+        # BOTONES PERMANENTES AÑADIDOS AL PANEL
         btn_eliminar = TacticalBtn("🗑️", DANGER_RED, limpiar)
+        btn_ensenar = TacticalBtn("🧠", NEON_PURPLE, lambda e: open_dialog_safe(dlg_new_food))
 
         return ft.Column([
             ft.Row([dd_mom, tf_alim]),
-            ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), btn_eliminar]),
+            ft.Row([
+                tf_gr, 
+                ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), 
+                btn_ensenar, 
+                btn_eliminar
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             lbl_status,
             ft.Container(content=lista_comidas, expand=True, bgcolor=CARD_BG, border_radius=10, padding=10),
             ft.Container(content=ft.Row([lbl_tot], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=10)
@@ -537,7 +572,7 @@ def main(page: ft.Page):
         page.update()
 
     def show_main_interface():
-        titulo_app = "MAGI OS 8.0 (EN)" if current_lang == "en" else "MAGI OS 8.0 (ES)"
+        titulo_app = "MAGI OS 9.0 (EN)" if current_lang == "en" else "MAGI OS 9.0 (ES)"
         page.appbar = ft.AppBar(
             title=ft.Text(titulo_app, color=NEON_GREEN, weight="bold", size=18),
             bgcolor=CARD_BG,
