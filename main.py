@@ -14,28 +14,82 @@ DANGER_RED = "#EF4444"
 TEXT_WHITE = "#F8FAFC"
 TEXT_MUTED = "#94A3B8"        
 
-DATA_FILE = "magi_data_v10.json"
+DATA_FILE = "magi_data_v11.json"
 
 # ==========================================
-# CEREBRO MAGI Y DICCIONARIO
+# CEREBRO MAGI Y DICCIONARIO (EXPANSIÓN COLOMBIA)
+# Todos los valores son por cada 100g (o 100ml)
 # ==========================================
 ALIMENTOS_OFFLINE = {
     "es": {
+        # Naturales e Internacionales
         "pollo": {"carbs": 0.0, "kcal": 165, "cat": "Natural"}, "carne de res": {"carbs": 0.0, "kcal": 250, "cat": "Natural"},
         "cerdo": {"carbs": 0.0, "kcal": 242, "cat": "Natural"}, "pescado": {"carbs": 0.0, "kcal": 205, "cat": "Natural"},
         "huevo": {"carbs": 1.1, "kcal": 155, "cat": "Natural"}, "salchicha": {"carbs": 4.0, "kcal": 300, "cat": "Embutido"},
         "queso": {"carbs": 1.3, "kcal": 402, "cat": "Natural"}, "arroz": {"carbs": 28.0, "kcal": 130, "cat": "Natural"},
         "pasta": {"carbs": 30.0, "kcal": 131, "cat": "Preparada"}, "pan": {"carbs": 49.0, "kcal": 265, "cat": "Preparada"},
         "papa": {"carbs": 17.0, "kcal": 77, "cat": "Natural"}, "manzana": {"carbs": 14.0, "kcal": 52, "cat": "Natural"},
-        "arepa": {"carbs": 45.0, "kcal": 210, "cat": "Preparada"}, "empanada": {"carbs": 35.0, "kcal": 250, "cat": "Fritura"},
-        "pizza": {"carbs": 33.0, "kcal": 266, "cat": "Preparada"}, "hamburguesa": {"carbs": 30.0, "kcal": 295, "cat": "Preparada"}
+        "pizza": {"carbs": 33.0, "kcal": 266, "cat": "Preparada"}, "hamburguesa": {"carbs": 30.0, "kcal": 295, "cat": "Preparada"},
+        
+        # ========================================
+        # MARCAS Y SNACKS COLOMBIANOS
+        # ========================================
+        "chocoramo": {"carbs": 55.0, "kcal": 420, "cat": "Snack"},
+        "gansito": {"carbs": 62.0, "kcal": 410, "cat": "Snack"},
+        "papas margarita limon": {"carbs": 52.0, "kcal": 536, "cat": "Snack"},
+        "papas margarita pollo": {"carbs": 51.0, "kcal": 540, "cat": "Snack"},
+        "galletas tosh miel": {"carbs": 71.0, "kcal": 430, "cat": "Snack"},
+        "galletas saltin noel": {"carbs": 72.0, "kcal": 430, "cat": "Snack"},
+        "galletas festival": {"carbs": 70.0, "kcal": 470, "cat": "Snack"},
+        "galletas ducales": {"carbs": 65.0, "kcal": 480, "cat": "Snack"},
+        "chocolatina jet": {"carbs": 62.0, "kcal": 530, "cat": "Snack"},
+        "burbujas jet": {"carbs": 65.0, "kcal": 510, "cat": "Snack"},
+        "todo rico": {"carbs": 45.0, "kcal": 530, "cat": "Snack"},
+        "choclitos": {"carbs": 60.0, "kcal": 500, "cat": "Snack"},
+        "mani moto": {"carbs": 15.0, "kcal": 600, "cat": "Snack"},
+        "pony malta": {"carbs": 11.0, "kcal": 42, "cat": "Bebida"},
+        "hit mora": {"carbs": 12.0, "kcal": 48, "cat": "Bebida"},
+        "bocadillo veleño": {"carbs": 85.0, "kcal": 350, "cat": "Snack"},
+        "arequipe": {"carbs": 60.0, "kcal": 315, "cat": "Snack"},
+        
+        # ========================================
+        # COMIDA TRADICIONAL Y PREPARACIONES
+        # ========================================
+        "ajiaco": {"carbs": 14.0, "kcal": 85, "cat": "Preparada"},
+        "sancocho": {"carbs": 11.0, "kcal": 80, "cat": "Preparada"},
+        "bandeja paisa": {"carbs": 28.0, "kcal": 290, "cat": "Preparada"},
+        "mondongo": {"carbs": 12.0, "kcal": 110, "cat": "Preparada"},
+        "buñuelo": {"carbs": 35.0, "kcal": 380, "cat": "Preparada"},
+        "pan de bono": {"carbs": 40.0, "kcal": 360, "cat": "Preparada"},
+        "almojabana": {"carbs": 38.0, "kcal": 340, "cat": "Preparada"},
+        "empanada": {"carbs": 30.0, "kcal": 260, "cat": "Fritura"},
+        "arepa de choclo": {"carbs": 42.0, "kcal": 280, "cat": "Preparada"},
+        "arepa de queso": {"carbs": 35.0, "kcal": 300, "cat": "Preparada"},
+        "arepa paisa": {"carbs": 45.0, "kcal": 200, "cat": "Preparada"}, # Blanca sin queso
+        "patacon": {"carbs": 35.0, "kcal": 250, "cat": "Fritura"},
+        "platano maduro frito": {"carbs": 45.0, "kcal": 280, "cat": "Fritura"},
+        "arroz con pollo": {"carbs": 25.0, "kcal": 180, "cat": "Preparada"},
+        "tamal": {"carbs": 20.0, "kcal": 190, "cat": "Preparada"},
+        "hogao": {"carbs": 8.0, "kcal": 90, "cat": "Preparada"},
+        "panela": {"carbs": 95.0, "kcal": 380, "cat": "Natural"},
+        
+        # ========================================
+        # CARNES FRÍAS Y LÁCTEOS
+        # ========================================
+        "morcilla": {"carbs": 12.0, "kcal": 320, "cat": "Embutido"},
+        "chunchurria": {"carbs": 0.0, "kcal": 280, "cat": "Natural"},
+        "chorizo antioqueño": {"carbs": 3.0, "kcal": 350, "cat": "Embutido"},
+        "salchichon cervecero": {"carbs": 4.0, "kcal": 310, "cat": "Embutido"},
+        "jamon pietran": {"carbs": 2.0, "kcal": 105, "cat": "Embutido"},
+        "salchicha zenu": {"carbs": 5.0, "kcal": 250, "cat": "Embutido"},
+        "quesito antioqueño": {"carbs": 3.0, "kcal": 270, "cat": "Natural"},
+        "suero costeño": {"carbs": 4.0, "kcal": 300, "cat": "Natural"}
     },
     "en": {
         "chicken": {"carbs": 0.0, "kcal": 165, "cat": "Natural"}, "beef": {"carbs": 0.0, "kcal": 250, "cat": "Natural"},
         "egg": {"carbs": 1.1, "kcal": 155, "cat": "Natural"}, "sausage": {"carbs": 4.0, "kcal": 300, "cat": "Processed"},
         "rice": {"carbs": 28.0, "kcal": 130, "cat": "Natural"}, "pasta": {"carbs": 30.0, "kcal": 131, "cat": "Prepared"},
-        "bread": {"carbs": 49.0, "kcal": 265, "cat": "Prepared"}, "potato": {"carbs": 17.0, "kcal": 77, "cat": "Natural"},
-        "pizza": {"carbs": 33.0, "kcal": 266, "cat": "Prepared"}, "hamburger": {"carbs": 30.0, "kcal": 295, "cat": "Prepared"}
+        "bread": {"carbs": 49.0, "kcal": 265, "cat": "Prepared"}, "potato": {"carbs": 17.0, "kcal": 77, "cat": "Natural"}
     }
 }
 
@@ -77,45 +131,43 @@ LANG = {
 }
 
 # ==========================================
-# RUTINAS POR DÍA DE LA SEMANA
+# RUTINAS ESTRICTAS A, B, C (Bloqueo por Día)
 # ==========================================
 def generar_rutina_del_dia(eq_idx, cond, dia_idx):
     s_txt = "3x12" if cond < 3 else "4x15"
     cardio = "CARDIO OPCIONAL: 15-20 min." if cond >= 3 else "CARDIO OPCIONAL: 10 min."
         
+    # Día 6 es Domingo (Descanso)
+    if dia_idx == 6:
+        return "DOMINGO - DESCANSO ACTIVO", ["Día Libre", "Masaje o Foam Roller", "Estiramiento Completo", "Preparación de Comidas"], s_txt, "CARDIO OPCIONAL: Caminata ligera de 20 min."
+        
+    # Rotación A, B, C para los días Lunes(0) a Sábado(5)
+    # 0->A, 1->B, 2->C, 3->A, 4->B, 5->C
+    variante = dia_idx % 3
+    dias_nombres = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"]
+    dia_str = dias_nombres[dia_idx]
+
     if eq_idx == 0: 
         rutinas = [
-            ("LUNES: EMPUJE", ["Push-ups", "Dips (o en Silla)", "Pike Push-ups", "Plank Posición Alta"]),
-            ("MARTES: TIRÓN Y CORE", ["Pull-ups (o Remos invertidos)", "Hollow Body", "Superman", "Mountain Climbers"]),
-            ("MIÉRCOLES: PIERNAS", ["Squats Libres", "Lunges Alternos", "Glute Bridges", "Elevación de Pantorrillas"]),
-            ("JUEVES: DESCANSO ACTIVO", ["Estiramiento Completo", "Caminata de 30 min", "Yoga Básico", "Rotación Articular"]),
-            ("VIERNES: FULL BODY", ["Push-ups", "Squats", "Burpees", "Jumping Jacks"]),
-            ("SÁBADO: HIIT CALISTENIA", ["High Knees (30s)", "Jumping Jacks (30s)", "Burpees (30s)", "Plank (30s)"]),
-            ("DOMINGO: RECUPERACIÓN", ["Día Libre", "Masaje/Foam Roller", "Hidratación Profunda", "Preparación Semanal"])
+            ("RUTINA A: EMPUJE", ["Push-ups", "Dips (o en Silla)", "Pike Push-ups", "Plank"]),
+            ("RUTINA B: TIRÓN Y CORE", ["Pull-ups (o Remos)", "Hollow Body", "Superman", "Mountain Climbers"]),
+            ("RUTINA C: PIERNAS", ["Squats Libres", "Lunges Alternos", "Glute Bridges", "Elevación Pantorrillas"])
         ]
     elif eq_idx == 2: 
         rutinas = [
-            ("LUNES: PECHO Y TRÍCEPS", ["Bench Press", "Incline DB Press", "Tricep Pushdown (Cables)", "Pec Deck"]),
-            ("MARTES: ESPALDA Y BÍCEPS", ["Lat Pulldown", "Seated Cable Row", "Barbell Bicep Curl", "Face Pulls"]),
-            ("MIÉRCOLES: PIERNAS", ["Barbell Squats", "Leg Press", "Leg Extensions", "Calf Raises"]),
-            ("JUEVES: HOMBROS Y CORE", ["Overhead Press", "Lateral Raises", "Cable Crunches", "Plank con Peso"]),
-            ("VIERNES: FULL BODY (GYM)", ["Deadlift", "Leg Press", "Chest Press Machine", "Cable Rows"]),
-            ("SÁBADO: CARDIO Y ABS", ["Cinta/Treadmill 20m", "Bici Estática 15m", "Hanging Leg Raises", "Crunches"]),
-            ("DOMINGO: DESCANSO", ["Recuperación", "Sauna/Masaje", "Caminata Ligera", "Descanso Total"])
+            ("RUTINA A: PECHO Y TRÍCEPS", ["Bench Press", "Incline DB Press", "Tricep Pushdown", "Pec Deck"]),
+            ("RUTINA B: ESPALDA Y BÍCEPS", ["Lat Pulldown", "Seated Cable Row", "Barbell Bicep Curl", "Face Pulls"]),
+            ("RUTINA C: PIERNAS", ["Barbell Squats", "Leg Press", "Leg Extensions", "Calf Raises"])
         ]
     else: 
         rutinas = [
-            ("LUNES: EMPUJE CON PESAS", ["DB Floor Press", "DB Push Press", "Lateral Raises", "Overhead Triceps"]),
-            ("MARTES: TIRÓN CON PESAS", ["DB Row a una mano", "DB Pullover", "Hammer Curls", "Renegade Row"]),
-            ("MIÉRCOLES: PIERNAS (HOME)", ["Goblet Squat", "DB RDL (Peso Muerto)", "Lunges con Mancuernas", "Calf Raises"]),
-            ("JUEVES: CORE ACTIVO", ["Sit-ups", "Russian Twists con DB", "Plank Estricto", "Leg Raises"]),
-            ("VIERNES: FULL BODY", ["Thrusters (Sentadilla + Press)", "DB Swings", "Squat to Press", "Man Makers"]),
-            ("SÁBADO: HIIT CASERO", ["Burpees", "DB Snatches", "Jumping Jacks", "Shadow Boxing con Peso"]),
-            ("DOMINGO: DESCANSO", ["Descanso Activo", "Estiramientos", "Caminata al Aire Libre", "Recuperación"])
+            ("RUTINA A: EMPUJE", ["DB Floor Press", "DB Push Press", "Lateral Raises", "Overhead Triceps"]),
+            ("RUTINA B: TIRÓN", ["DB Row a una mano", "DB Pullover", "Hammer Curls", "Renegade Row"]),
+            ("RUTINA C: PIERNAS", ["Goblet Squat", "DB RDL (Peso Muerto)", "Lunges con Mancuernas", "Calf Raises"])
         ]
 
-    titulo, ejs = rutinas[dia_idx % 7]
-    return titulo, ejs, s_txt, cardio
+    titulo, ejs = rutinas[variante]
+    return f"{dia_str} | {titulo}", ejs, s_txt, cardio
 
 def TacticalBtn(simbolo_texto, color, accion):
     return ft.Container(
@@ -123,7 +175,7 @@ def TacticalBtn(simbolo_texto, color, accion):
     )
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 10.0"
+    page.title = "MAGI OS 11.0"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -133,7 +185,6 @@ def main(page: ft.Page):
     master_container = ft.Container(expand=True, padding=10)
     current_view_idx = 0
     current_lang = "es"
-    variante_rutina = 0
     
     app_data = {"perfil": {"configurado": False}, "glicemias": [], "diccionario_magi": {}}
     
@@ -239,7 +290,8 @@ def main(page: ft.Page):
 
         return ft.Column([
             ft.Text("MINDSET", size=24, color=NEON_PURPLE, weight="bold"),
-            ft.Container(content=texto_quote, padding=30, bgcolor=CARD_BG, border_radius=10, expand=True),
+            # SOLUCIÓN: Agregado alignment=ft.alignment.center al contenedor
+            ft.Container(content=texto_quote, padding=30, bgcolor=CARD_BG, border_radius=10, expand=True, alignment=ft.alignment.center),
             ft.ElevatedButton(l["btn_directiva"], bgcolor=NEON_GREEN, color=BG_COLOR, on_click=cambiar_frase)
         ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, expand=True)
 
@@ -322,15 +374,14 @@ def main(page: ft.Page):
         ], expand=True)
 
     def view_combate():
-        nonlocal variante_rutina
         l = LANG[current_lang]
         eq = app_data["perfil"].get("equipo_idx", 1)
         cond = app_data["perfil"].get("acondicionamiento", 3)
         
+        # LECTURA DEL RELOJ CELULAR PARA BLOQUEAR RUTINA SEGÚN DÍA
         dia_semana_actual = datetime.datetime.today().weekday()
-        dia_calculado = dia_semana_actual + variante_rutina
         
-        titulo, ejercicios, series_txt, recomendacion_cardio = generar_rutina_del_dia(eq, cond, dia_calculado)
+        titulo, ejercicios, series_txt, recomendacion_cardio = generar_rutina_del_dia(eq, cond, dia_semana_actual)
         
         num_series = int(series_txt.split('x')[0])
         total_checks = len(ejercicios) * num_series
@@ -374,19 +425,14 @@ def main(page: ft.Page):
             
             try:
                 if timer_running: 
-                    # ==================================================
-                    # MANIOBRA V10: ALARMA VISUAL ESTROBOSCÓPICA 🚨
-                    # Reemplazo táctico por falta de compatibilidad de audio
-                    # ==================================================
-                    for _ in range(5): # Parpadea 5 veces
+                    for _ in range(5): 
                         txt_timer.color = DANGER_RED
                         txt_timer.update()
                         time.sleep(0.2)
-                        txt_timer.color = BG_COLOR # Se funde con el fondo (efecto parpadeo)
+                        txt_timer.color = BG_COLOR 
                         txt_timer.update()
                         time.sleep(0.2)
                     
-                    # Queda en rojo advirtiendo que el tiempo terminó
                     txt_timer.color = DANGER_RED
                     txt_timer.update()
             except: pass
@@ -403,16 +449,13 @@ def main(page: ft.Page):
                 txt_timer.update()
             except: pass
         
-        def cambiar_rutina(e):
-            nonlocal variante_rutina; variante_rutina += 1;
-            master_container.content = view_combate(); page.update()
-
-        btn_refresh = TacticalBtn("🔄", WARNING_ORANGE, cambiar_rutina)
+        # Eliminado el botón táctico de recargar. 
+        # Título centrado demostrando que no hay atajos.
         btn_stop = TacticalBtn("🛑", DANGER_RED, stop_timer)
 
         return ft.Column([
-            ft.Row([ft.Text(f"{titulo} ({series_txt})", color=WARNING_ORANGE, size=20, weight="bold"), btn_refresh], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
-            ft.Text(recomendacion_cardio, color=NEON_PURPLE, size=12, italic=True, weight="bold"),
+            ft.Row([ft.Text(f"{titulo} ({series_txt})", color=WARNING_ORANGE, size=16, weight="bold", text_align=ft.TextAlign.CENTER)], alignment=ft.MainAxisAlignment.CENTER),
+            ft.Row([ft.Text(recomendacion_cardio, color=NEON_PURPLE, size=12, italic=True, weight="bold")], alignment=ft.MainAxisAlignment.CENTER),
             lbl_sync, prog_bar,
             ft.Container(content=lista_ej, expand=True),
             ft.Container(content=ft.Column([
@@ -475,7 +518,7 @@ def main(page: ft.Page):
         dlg_new_food = ft.AlertDialog(
             title=ft.Text("ENSEÑAR A MAGI", color=NEON_PURPLE),
             content=ft.Column([
-                ft.Text("Ingresa los macros por cada 100g:"),
+                ft.Text("Ingresa los macros por cada 100g/ml:"),
                 ft.Row([tf_new_carbs, tf_new_kcal])
             ], height=120),
             actions=[
@@ -575,7 +618,7 @@ def main(page: ft.Page):
         page.update()
 
     def show_main_interface():
-        titulo_app = "MAGI OS 10.0 (EN)" if current_lang == "en" else "MAGI OS 10.0 (ES)"
+        titulo_app = "MAGI OS 11.0 (EN)" if current_lang == "en" else "MAGI OS 11.0 (ES)"
         page.appbar = ft.AppBar(
             title=ft.Text(titulo_app, color=NEON_GREEN, weight="bold", size=18),
             bgcolor=CARD_BG,
