@@ -14,15 +14,13 @@ DANGER_RED = "#EF4444"
 TEXT_WHITE = "#F8FAFC"
 TEXT_MUTED = "#94A3B8"        
 
-DATA_FILE = "magi_data_v11.json"
+DATA_FILE = "magi_data_v12.json"
 
 # ==========================================
 # CEREBRO MAGI Y DICCIONARIO (EXPANSIÓN COLOMBIA)
-# Todos los valores son por cada 100g (o 100ml)
 # ==========================================
 ALIMENTOS_OFFLINE = {
     "es": {
-        # Naturales e Internacionales
         "pollo": {"carbs": 0.0, "kcal": 165, "cat": "Natural"}, "carne de res": {"carbs": 0.0, "kcal": 250, "cat": "Natural"},
         "cerdo": {"carbs": 0.0, "kcal": 242, "cat": "Natural"}, "pescado": {"carbs": 0.0, "kcal": 205, "cat": "Natural"},
         "huevo": {"carbs": 1.1, "kcal": 155, "cat": "Natural"}, "salchicha": {"carbs": 4.0, "kcal": 300, "cat": "Embutido"},
@@ -31,9 +29,7 @@ ALIMENTOS_OFFLINE = {
         "papa": {"carbs": 17.0, "kcal": 77, "cat": "Natural"}, "manzana": {"carbs": 14.0, "kcal": 52, "cat": "Natural"},
         "pizza": {"carbs": 33.0, "kcal": 266, "cat": "Preparada"}, "hamburguesa": {"carbs": 30.0, "kcal": 295, "cat": "Preparada"},
         
-        # ========================================
         # MARCAS Y SNACKS COLOMBIANOS
-        # ========================================
         "chocoramo": {"carbs": 55.0, "kcal": 420, "cat": "Snack"},
         "gansito": {"carbs": 62.0, "kcal": 410, "cat": "Snack"},
         "papas margarita limon": {"carbs": 52.0, "kcal": 536, "cat": "Snack"},
@@ -52,9 +48,7 @@ ALIMENTOS_OFFLINE = {
         "bocadillo veleño": {"carbs": 85.0, "kcal": 350, "cat": "Snack"},
         "arequipe": {"carbs": 60.0, "kcal": 315, "cat": "Snack"},
         
-        # ========================================
-        # COMIDA TRADICIONAL Y PREPARACIONES
-        # ========================================
+        # COMIDA TRADICIONAL
         "ajiaco": {"carbs": 14.0, "kcal": 85, "cat": "Preparada"},
         "sancocho": {"carbs": 11.0, "kcal": 80, "cat": "Preparada"},
         "bandeja paisa": {"carbs": 28.0, "kcal": 290, "cat": "Preparada"},
@@ -65,7 +59,7 @@ ALIMENTOS_OFFLINE = {
         "empanada": {"carbs": 30.0, "kcal": 260, "cat": "Fritura"},
         "arepa de choclo": {"carbs": 42.0, "kcal": 280, "cat": "Preparada"},
         "arepa de queso": {"carbs": 35.0, "kcal": 300, "cat": "Preparada"},
-        "arepa paisa": {"carbs": 45.0, "kcal": 200, "cat": "Preparada"}, # Blanca sin queso
+        "arepa paisa": {"carbs": 45.0, "kcal": 200, "cat": "Preparada"},
         "patacon": {"carbs": 35.0, "kcal": 250, "cat": "Fritura"},
         "platano maduro frito": {"carbs": 45.0, "kcal": 280, "cat": "Fritura"},
         "arroz con pollo": {"carbs": 25.0, "kcal": 180, "cat": "Preparada"},
@@ -73,9 +67,7 @@ ALIMENTOS_OFFLINE = {
         "hogao": {"carbs": 8.0, "kcal": 90, "cat": "Preparada"},
         "panela": {"carbs": 95.0, "kcal": 380, "cat": "Natural"},
         
-        # ========================================
         # CARNES FRÍAS Y LÁCTEOS
-        # ========================================
         "morcilla": {"carbs": 12.0, "kcal": 320, "cat": "Embutido"},
         "chunchurria": {"carbs": 0.0, "kcal": 280, "cat": "Natural"},
         "chorizo antioqueño": {"carbs": 3.0, "kcal": 350, "cat": "Embutido"},
@@ -137,12 +129,9 @@ def generar_rutina_del_dia(eq_idx, cond, dia_idx):
     s_txt = "3x12" if cond < 3 else "4x15"
     cardio = "CARDIO OPCIONAL: 15-20 min." if cond >= 3 else "CARDIO OPCIONAL: 10 min."
         
-    # Día 6 es Domingo (Descanso)
     if dia_idx == 6:
         return "DOMINGO - DESCANSO ACTIVO", ["Día Libre", "Masaje o Foam Roller", "Estiramiento Completo", "Preparación de Comidas"], s_txt, "CARDIO OPCIONAL: Caminata ligera de 20 min."
         
-    # Rotación A, B, C para los días Lunes(0) a Sábado(5)
-    # 0->A, 1->B, 2->C, 3->A, 4->B, 5->C
     variante = dia_idx % 3
     dias_nombres = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"]
     dia_str = dias_nombres[dia_idx]
@@ -175,7 +164,7 @@ def TacticalBtn(simbolo_texto, color, accion):
     )
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 11.0"
+    page.title = "MAGI OS 12.0"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -290,8 +279,16 @@ def main(page: ft.Page):
 
         return ft.Column([
             ft.Text("MINDSET", size=24, color=NEON_PURPLE, weight="bold"),
-            # SOLUCIÓN: Agregado alignment=ft.alignment.center al contenedor
-            ft.Container(content=texto_quote, padding=30, bgcolor=CARD_BG, border_radius=10, expand=True, alignment=ft.alignment.center),
+            # SOLUCIÓN V12: Contenedor con una columna interna que fuerza el centrado. 100% compatible.
+            ft.Container(
+                content=ft.Column(
+                    [texto_quote], 
+                    alignment=ft.MainAxisAlignment.CENTER, 
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER, 
+                    expand=True
+                ),
+                padding=30, bgcolor=CARD_BG, border_radius=10, expand=True
+            ),
             ft.ElevatedButton(l["btn_directiva"], bgcolor=NEON_GREEN, color=BG_COLOR, on_click=cambiar_frase)
         ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, expand=True)
 
@@ -378,7 +375,6 @@ def main(page: ft.Page):
         eq = app_data["perfil"].get("equipo_idx", 1)
         cond = app_data["perfil"].get("acondicionamiento", 3)
         
-        # LECTURA DEL RELOJ CELULAR PARA BLOQUEAR RUTINA SEGÚN DÍA
         dia_semana_actual = datetime.datetime.today().weekday()
         
         titulo, ejercicios, series_txt, recomendacion_cardio = generar_rutina_del_dia(eq, cond, dia_semana_actual)
@@ -449,8 +445,6 @@ def main(page: ft.Page):
                 txt_timer.update()
             except: pass
         
-        # Eliminado el botón táctico de recargar. 
-        # Título centrado demostrando que no hay atajos.
         btn_stop = TacticalBtn("🛑", DANGER_RED, stop_timer)
 
         return ft.Column([
@@ -618,7 +612,7 @@ def main(page: ft.Page):
         page.update()
 
     def show_main_interface():
-        titulo_app = "MAGI OS 11.0 (EN)" if current_lang == "en" else "MAGI OS 11.0 (ES)"
+        titulo_app = "MAGI OS 12.0 (EN)" if current_lang == "en" else "MAGI OS 12.0 (ES)"
         page.appbar = ft.AppBar(
             title=ft.Text(titulo_app, color=NEON_GREEN, weight="bold", size=18),
             bgcolor=CARD_BG,
