@@ -14,7 +14,7 @@ DANGER_RED = "#EF4444"
 TEXT_WHITE = "#F8FAFC"
 TEXT_MUTED = "#94A3B8"        
 
-DATA_FILE = "magi_data_v9.json"
+DATA_FILE = "magi_data_v10.json"
 
 # ==========================================
 # CEREBRO MAGI Y DICCIONARIO
@@ -123,21 +123,17 @@ def TacticalBtn(simbolo_texto, color, accion):
     )
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 9.0"
+    page.title = "MAGI OS 10.0"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
     page.spacing = 0
     page.fonts = {"Consolas": "Consolas"}
     
-    # SONIDO DEL CRONÓMETRO INYECTADO
-    audio_alarm = ft.Audio(src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg", autoplay=False)
-    page.overlay.append(audio_alarm)
-    
     master_container = ft.Container(expand=True, padding=10)
     current_view_idx = 0
     current_lang = "es"
-    variante_rutina = 0 # Usado ahora para "adelantar" de día si el usuario lo desea
+    variante_rutina = 0
     
     app_data = {"perfil": {"configurado": False}, "glicemias": [], "diccionario_magi": {}}
     
@@ -288,7 +284,6 @@ def main(page: ft.Page):
                 if optimo > 0: barras.append(ft.Container(bgcolor=NEON_GREEN, height=15, expand=optimo))
                 if hiper > 0: barras.append(ft.Container(bgcolor=WARNING_ORANGE, height=15, expand=hiper))
                 
-                # BUG DEL ROW CORREGIDO: Eliminamos el border_radius de ft.Row para evitar el crash
                 chart_container.content = ft.Column([
                     ft.Container(content=ft.Row(barras, spacing=0), border_radius=5, clip_behavior=ft.ClipBehavior.HARD_EDGE),
                     ft.Row([
@@ -332,9 +327,7 @@ def main(page: ft.Page):
         eq = app_data["perfil"].get("equipo_idx", 1)
         cond = app_data["perfil"].get("acondicionamiento", 3)
         
-        # EL NÚCLEO AHORA LEE EL DÍA DE LA SEMANA REAL (0=Lunes, 6=Domingo)
         dia_semana_actual = datetime.datetime.today().weekday()
-        # variante_rutina sirve para "adelantar" de día si presionas el botón de refrescar
         dia_calculado = dia_semana_actual + variante_rutina
         
         titulo, ejercicios, series_txt, recomendacion_cardio = generar_rutina_del_dia(eq, cond, dia_calculado)
@@ -381,10 +374,21 @@ def main(page: ft.Page):
             
             try:
                 if timer_running: 
+                    # ==================================================
+                    # MANIOBRA V10: ALARMA VISUAL ESTROBOSCÓPICA 🚨
+                    # Reemplazo táctico por falta de compatibilidad de audio
+                    # ==================================================
+                    for _ in range(5): # Parpadea 5 veces
+                        txt_timer.color = DANGER_RED
+                        txt_timer.update()
+                        time.sleep(0.2)
+                        txt_timer.color = BG_COLOR # Se funde con el fondo (efecto parpadeo)
+                        txt_timer.update()
+                        time.sleep(0.2)
+                    
+                    # Queda en rojo advirtiendo que el tiempo terminó
                     txt_timer.color = DANGER_RED
                     txt_timer.update()
-                    # SONIDO AL TERMINAR EL CRONÓMETRO
-                    audio_alarm.play() 
             except: pass
 
         def start_timer(s): 
@@ -395,11 +399,11 @@ def main(page: ft.Page):
             timer_running = False
             try:
                 txt_timer.value="00:00"
+                txt_timer.color=TEXT_WHITE
                 txt_timer.update()
             except: pass
         
         def cambiar_rutina(e):
-            # Ahora adelanta la rutina al siguiente día
             nonlocal variante_rutina; variante_rutina += 1;
             master_container.content = view_combate(); page.update()
 
@@ -463,7 +467,7 @@ def main(page: ft.Page):
                 guardar_datos()
                 close_dialog_safe(dlg_new_food)
                 mostrar_alerta("MAGI ha aprendido un nuevo alimento", NEON_GREEN)
-                tf_alim.value = alim_raw # Lo pone en la barra para añadir
+                tf_alim.value = alim_raw 
                 add_food(None) 
             except:
                 mostrar_alerta("Ingresa números válidos", DANGER_RED)
@@ -515,7 +519,6 @@ def main(page: ft.Page):
             registro_actual.clear()
             actualizar_pantalla_energia()
 
-        # BOTONES PERMANENTES AÑADIDOS AL PANEL
         btn_eliminar = TacticalBtn("🗑️", DANGER_RED, limpiar)
         btn_ensenar = TacticalBtn("🧠", NEON_PURPLE, lambda e: open_dialog_safe(dlg_new_food))
 
@@ -572,7 +575,7 @@ def main(page: ft.Page):
         page.update()
 
     def show_main_interface():
-        titulo_app = "MAGI OS 9.0 (EN)" if current_lang == "en" else "MAGI OS 9.0 (ES)"
+        titulo_app = "MAGI OS 10.0 (EN)" if current_lang == "en" else "MAGI OS 10.0 (ES)"
         page.appbar = ft.AppBar(
             title=ft.Text(titulo_app, color=NEON_GREEN, weight="bold", size=18),
             bgcolor=CARD_BG,
