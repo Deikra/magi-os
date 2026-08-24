@@ -14,10 +14,10 @@ DANGER_RED = "#EF4444"
 TEXT_WHITE = "#F8FAFC"
 TEXT_MUTED = "#94A3B8"        
 
-DATA_FILE = "magi_data_v12.json"
+DATA_FILE = "magi_data_v13.json"
 
 # ==========================================
-# CEREBRO MAGI Y DICCIONARIO (EXPANSIÓN COLOMBIA)
+# CEREBRO MAGI Y DICCIONARIO
 # ==========================================
 ALIMENTOS_OFFLINE = {
     "es": {
@@ -29,59 +29,31 @@ ALIMENTOS_OFFLINE = {
         "papa": {"carbs": 17.0, "kcal": 77, "cat": "Natural"}, "manzana": {"carbs": 14.0, "kcal": 52, "cat": "Natural"},
         "pizza": {"carbs": 33.0, "kcal": 266, "cat": "Preparada"}, "hamburguesa": {"carbs": 30.0, "kcal": 295, "cat": "Preparada"},
         
-        # MARCAS Y SNACKS COLOMBIANOS
-        "chocoramo": {"carbs": 55.0, "kcal": 420, "cat": "Snack"},
-        "gansito": {"carbs": 62.0, "kcal": 410, "cat": "Snack"},
-        "papas margarita limon": {"carbs": 52.0, "kcal": 536, "cat": "Snack"},
-        "papas margarita pollo": {"carbs": 51.0, "kcal": 540, "cat": "Snack"},
-        "galletas tosh miel": {"carbs": 71.0, "kcal": 430, "cat": "Snack"},
-        "galletas saltin noel": {"carbs": 72.0, "kcal": 430, "cat": "Snack"},
-        "galletas festival": {"carbs": 70.0, "kcal": 470, "cat": "Snack"},
-        "galletas ducales": {"carbs": 65.0, "kcal": 480, "cat": "Snack"},
-        "chocolatina jet": {"carbs": 62.0, "kcal": 530, "cat": "Snack"},
-        "burbujas jet": {"carbs": 65.0, "kcal": 510, "cat": "Snack"},
-        "todo rico": {"carbs": 45.0, "kcal": 530, "cat": "Snack"},
-        "choclitos": {"carbs": 60.0, "kcal": 500, "cat": "Snack"},
-        "mani moto": {"carbs": 15.0, "kcal": 600, "cat": "Snack"},
-        "pony malta": {"carbs": 11.0, "kcal": 42, "cat": "Bebida"},
-        "hit mora": {"carbs": 12.0, "kcal": 48, "cat": "Bebida"},
-        "bocadillo veleño": {"carbs": 85.0, "kcal": 350, "cat": "Snack"},
-        "arequipe": {"carbs": 60.0, "kcal": 315, "cat": "Snack"},
-        
-        # COMIDA TRADICIONAL
-        "ajiaco": {"carbs": 14.0, "kcal": 85, "cat": "Preparada"},
-        "sancocho": {"carbs": 11.0, "kcal": 80, "cat": "Preparada"},
-        "bandeja paisa": {"carbs": 28.0, "kcal": 290, "cat": "Preparada"},
-        "mondongo": {"carbs": 12.0, "kcal": 110, "cat": "Preparada"},
-        "buñuelo": {"carbs": 35.0, "kcal": 380, "cat": "Preparada"},
-        "pan de bono": {"carbs": 40.0, "kcal": 360, "cat": "Preparada"},
-        "almojabana": {"carbs": 38.0, "kcal": 340, "cat": "Preparada"},
-        "empanada": {"carbs": 30.0, "kcal": 260, "cat": "Fritura"},
-        "arepa de choclo": {"carbs": 42.0, "kcal": 280, "cat": "Preparada"},
-        "arepa de queso": {"carbs": 35.0, "kcal": 300, "cat": "Preparada"},
-        "arepa paisa": {"carbs": 45.0, "kcal": 200, "cat": "Preparada"},
-        "patacon": {"carbs": 35.0, "kcal": 250, "cat": "Fritura"},
-        "platano maduro frito": {"carbs": 45.0, "kcal": 280, "cat": "Fritura"},
-        "arroz con pollo": {"carbs": 25.0, "kcal": 180, "cat": "Preparada"},
-        "tamal": {"carbs": 20.0, "kcal": 190, "cat": "Preparada"},
-        "hogao": {"carbs": 8.0, "kcal": 90, "cat": "Preparada"},
-        "panela": {"carbs": 95.0, "kcal": 380, "cat": "Natural"},
-        
-        # CARNES FRÍAS Y LÁCTEOS
-        "morcilla": {"carbs": 12.0, "kcal": 320, "cat": "Embutido"},
-        "chunchurria": {"carbs": 0.0, "kcal": 280, "cat": "Natural"},
-        "chorizo antioqueño": {"carbs": 3.0, "kcal": 350, "cat": "Embutido"},
-        "salchichon cervecero": {"carbs": 4.0, "kcal": 310, "cat": "Embutido"},
-        "jamon pietran": {"carbs": 2.0, "kcal": 105, "cat": "Embutido"},
-        "salchicha zenu": {"carbs": 5.0, "kcal": 250, "cat": "Embutido"},
-        "quesito antioqueño": {"carbs": 3.0, "kcal": 270, "cat": "Natural"},
-        "suero costeño": {"carbs": 4.0, "kcal": 300, "cat": "Natural"}
+        "chocoramo": {"carbs": 55.0, "kcal": 420, "cat": "Snack"}, "gansito": {"carbs": 62.0, "kcal": 410, "cat": "Snack"},
+        "papas margarita limon": {"carbs": 52.0, "kcal": 536, "cat": "Snack"}, "papas margarita pollo": {"carbs": 51.0, "kcal": 540, "cat": "Snack"},
+        "galletas tosh miel": {"carbs": 71.0, "kcal": 430, "cat": "Snack"}, "galletas saltin noel": {"carbs": 72.0, "kcal": 430, "cat": "Snack"},
+        "galletas festival": {"carbs": 70.0, "kcal": 470, "cat": "Snack"}, "galletas ducales": {"carbs": 65.0, "kcal": 480, "cat": "Snack"},
+        "chocolatina jet": {"carbs": 62.0, "kcal": 530, "cat": "Snack"}, "burbujas jet": {"carbs": 65.0, "kcal": 510, "cat": "Snack"},
+        "todo rico": {"carbs": 45.0, "kcal": 530, "cat": "Snack"}, "choclitos": {"carbs": 60.0, "kcal": 500, "cat": "Snack"},
+        "mani moto": {"carbs": 15.0, "kcal": 600, "cat": "Snack"}, "pony malta": {"carbs": 11.0, "kcal": 42, "cat": "Bebida"},
+        "hit mora": {"carbs": 12.0, "kcal": 48, "cat": "Bebida"}, "bocadillo veleño": {"carbs": 85.0, "kcal": 350, "cat": "Snack"},
+        "arequipe": {"carbs": 60.0, "kcal": 315, "cat": "Snack"}, "ajiaco": {"carbs": 14.0, "kcal": 85, "cat": "Preparada"},
+        "sancocho": {"carbs": 11.0, "kcal": 80, "cat": "Preparada"}, "bandeja paisa": {"carbs": 28.0, "kcal": 290, "cat": "Preparada"},
+        "mondongo": {"carbs": 12.0, "kcal": 110, "cat": "Preparada"}, "buñuelo": {"carbs": 35.0, "kcal": 380, "cat": "Preparada"},
+        "pan de bono": {"carbs": 40.0, "kcal": 360, "cat": "Preparada"}, "almojabana": {"carbs": 38.0, "kcal": 340, "cat": "Preparada"},
+        "empanada": {"carbs": 30.0, "kcal": 260, "cat": "Fritura"}, "arepa de choclo": {"carbs": 42.0, "kcal": 280, "cat": "Preparada"},
+        "arepa de queso": {"carbs": 35.0, "kcal": 300, "cat": "Preparada"}, "arepa paisa": {"carbs": 45.0, "kcal": 200, "cat": "Preparada"},
+        "patacon": {"carbs": 35.0, "kcal": 250, "cat": "Fritura"}, "platano maduro frito": {"carbs": 45.0, "kcal": 280, "cat": "Fritura"},
+        "arroz con pollo": {"carbs": 25.0, "kcal": 180, "cat": "Preparada"}, "tamal": {"carbs": 20.0, "kcal": 190, "cat": "Preparada"},
+        "hogao": {"carbs": 8.0, "kcal": 90, "cat": "Preparada"}, "panela": {"carbs": 95.0, "kcal": 380, "cat": "Natural"},
+        "morcilla": {"carbs": 12.0, "kcal": 320, "cat": "Embutido"}, "chunchurria": {"carbs": 0.0, "kcal": 280, "cat": "Natural"},
+        "chorizo antioqueño": {"carbs": 3.0, "kcal": 350, "cat": "Embutido"}, "salchichon cervecero": {"carbs": 4.0, "kcal": 310, "cat": "Embutido"},
+        "jamon pietran": {"carbs": 2.0, "kcal": 105, "cat": "Embutido"}, "salchicha zenu": {"carbs": 5.0, "kcal": 250, "cat": "Embutido"},
+        "quesito antioqueño": {"carbs": 3.0, "kcal": 270, "cat": "Natural"}, "suero costeño": {"carbs": 4.0, "kcal": 300, "cat": "Natural"}
     },
     "en": {
         "chicken": {"carbs": 0.0, "kcal": 165, "cat": "Natural"}, "beef": {"carbs": 0.0, "kcal": 250, "cat": "Natural"},
-        "egg": {"carbs": 1.1, "kcal": 155, "cat": "Natural"}, "sausage": {"carbs": 4.0, "kcal": 300, "cat": "Processed"},
-        "rice": {"carbs": 28.0, "kcal": 130, "cat": "Natural"}, "pasta": {"carbs": 30.0, "kcal": 131, "cat": "Prepared"},
-        "bread": {"carbs": 49.0, "kcal": 265, "cat": "Prepared"}, "potato": {"carbs": 17.0, "kcal": 77, "cat": "Natural"}
+        "egg": {"carbs": 1.1, "kcal": 155, "cat": "Natural"}, "sausage": {"carbs": 4.0, "kcal": 300, "cat": "Processed"}
     }
 }
 
@@ -93,14 +65,11 @@ LANG = {
         "metas": ["Perder Peso", "Ganar Masa", "Mantenimiento"],
         "equipos": ["Calistenia", "Pesas Básicas", "Gimnasio"],
         "niveles": ["1 - Sedentario", "2 - Principiante", "3 - Intermedio", "4 - Avanzado", "5 - Élite"],
-        "imc_res": "Análisis Listo", 
-        "btn_directiva": "NUEVA DIRECTIVA", "reg_gl": "Ingreso (mg/dL)", 
-        "filtros_gl": ["Hoy", "Ayer", "7 Días", "30 Días", "Todo"],
-        "gl_momentos": ["Ayunas", "Post-comida", "Otro"], 
+        "imc_res": "Análisis Listo", "btn_directiva": "NUEVA DIRECTIVA", "reg_gl": "Ingreso (mg/dL)", 
+        "filtros_gl": ["Hoy", "Ayer", "7 Días", "30 Días", "Todo"], "gl_momentos": ["Ayunas", "Post-comida", "Otro"], 
         "combate_title": "MISIÓN:", "sync_rate": "TASA DE SINC.:",
         "momento": "Momento", "alimento": "Alimento", "gramos": "Gramos",
-        "btn_anadir": "AÑADIR", "btn_ensenar": "ENSEÑAR MAGI", 
-        "momentos_lista": ["Desayuno", "Almuerzo", "Cena", "Snack"],
+        "btn_anadir": "AÑADIR", "btn_ensenar": "ENSEÑAR MAGI", "momentos_lista": ["Desayuno", "Almuerzo", "Cena", "Snack"],
         "alerta_val": "Dato inválido.", "quotes": ["No debes huir. Entrena.", "La disciplina es tu escudo."]
     },
     "en": {
@@ -110,53 +79,67 @@ LANG = {
         "metas": ["Lose Weight", "Gain Mass", "Maintenance"],
         "equipos": ["Calisthenics", "Basic Weights", "Full Gym"],
         "niveles": ["1 - Sedentary", "2 - Beginner", "3 - Intermediate", "4 - Advanced", "5 - Elite"],
-        "imc_res": "Analysis Ready", 
-        "btn_directiva": "NEW DIRECTIVE", "reg_gl": "Input (mg/dL)", 
-        "filtros_gl": ["Today", "Yesterday", "7 Days", "30 Days", "All"],
-        "gl_momentos": ["Fasting", "Post-meal", "Other"], 
+        "imc_res": "Analysis Ready", "btn_directiva": "NEW DIRECTIVE", "reg_gl": "Input (mg/dL)", 
+        "filtros_gl": ["Today", "Yesterday", "7 Days", "30 Days", "All"], "gl_momentos": ["Fasting", "Post-meal", "Other"], 
         "combate_title": "MISSION:", "sync_rate": "SYNC RATE:",
         "momento": "Meal", "alimento": "Food", "gramos": "Grams",
-        "btn_anadir": "ADD", "btn_ensenar": "TEACH MAGI", 
-        "momentos_lista": ["Breakfast", "Lunch", "Dinner", "Snack"],
+        "btn_anadir": "ADD", "btn_ensenar": "TEACH MAGI", "momentos_lista": ["Breakfast", "Lunch", "Dinner", "Snack"],
         "alerta_val": "Invalid data.", "quotes": ["You mustn't run away. Train.", "Discipline is your shield."]
     }
 }
 
 # ==========================================
-# RUTINAS ESTRICTAS A, B, C (Bloqueo por Día)
+# RUTINAS MAGI V13 (Español, Tiempos, Planchas)
 # ==========================================
 def generar_rutina_del_dia(eq_idx, cond, dia_idx):
-    s_txt = "3x12" if cond < 3 else "4x15"
+    # cond viene como un entero de 1 a 5
+    s_txt = "3x12" if cond <= 2 else ("4x12" if cond == 3 else "4x15")
     cardio = "CARDIO OPCIONAL: 15-20 min." if cond >= 3 else "CARDIO OPCIONAL: 10 min."
+    
+    # Asignación dinámica de descansos y tiempos de isometría
+    if cond <= 2: # Sedentario / Principiante
+        t1, t2 = 90, 120
+        iso_t = "30s"
+    elif cond == 3: # Intermedio
+        t1, t2 = 60, 90
+        iso_t = "45s"
+    else: # Avanzado / Elite
+        t1, t2 = 45, 60
+        iso_t = "60s"
+        
+    descanso_txt = f"Descanso: {t1}s - {t2}s"
         
     if dia_idx == 6:
-        return "DOMINGO - DESCANSO ACTIVO", ["Día Libre", "Masaje o Foam Roller", "Estiramiento Completo", "Preparación de Comidas"], s_txt, "CARDIO OPCIONAL: Caminata ligera de 20 min."
+        return "DOMINGO - DESCANSO ACTIVO", ["Día Libre", "Masaje o Foam Roller", "Estiramiento Completo", "Preparación Semanal"], s_txt, "CARDIO OPCIONAL: Caminata ligera de 20 min.", "FORMATO: Recuperación Libre", t1, t2
         
     variante = dia_idx % 3
     dias_nombres = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"]
     dia_str = dias_nombres[dia_idx]
 
     if eq_idx == 0: 
+        formato = f"FORMATO: Por Bloques (Circuito) | {descanso_txt}"
         rutinas = [
-            ("RUTINA A: EMPUJE", ["Push-ups", "Dips (o en Silla)", "Pike Push-ups", "Plank"]),
-            ("RUTINA B: TIRÓN Y CORE", ["Pull-ups (o Remos)", "Hollow Body", "Superman", "Mountain Climbers"]),
-            ("RUTINA C: PIERNAS", ["Squats Libres", "Lunges Alternos", "Glute Bridges", "Elevación Pantorrillas"])
+            ("RUTINA A: EMPUJE", ["Flexiones Clásicas", "Fondos (o en Silla)", "Flexiones en Pica", f"Plancha Estricta ({iso_t})"]),
+            ("RUTINA B: TIRÓN Y CORE", ["Dominadas (o Remos Invertidos)", f"Hollow Body - Posición Hueca ({iso_t})", f"Superman - Extensión Lumbar ({iso_t})", "Escaladores"]),
+            ("RUTINA C: PIERNAS", ["Sentadillas Libres", "Zancadas Alternas", "Puentes de Glúteo", "Elevación de Pantorrillas"])
         ]
     elif eq_idx == 2: 
+        formato = f"FORMATO: Series Tradicionales | {descanso_txt}"
         rutinas = [
-            ("RUTINA A: PECHO Y TRÍCEPS", ["Bench Press", "Incline DB Press", "Tricep Pushdown", "Pec Deck"]),
-            ("RUTINA B: ESPALDA Y BÍCEPS", ["Lat Pulldown", "Seated Cable Row", "Barbell Bicep Curl", "Face Pulls"]),
-            ("RUTINA C: PIERNAS", ["Barbell Squats", "Leg Press", "Leg Extensions", "Calf Raises"])
+            ("RUTINA A: PECHO Y TRÍCEPS", ["Press de Banca", "Press Inclinado con Mancuernas", "Extensión de Tríceps en Polea", "Aperturas en Máquina (Pec Deck)"]),
+            ("RUTINA B: ESPALDA Y BÍCEPS", ["Jalón al Pecho", "Remo Sentado en Polea", "Curl de Bíceps con Barra", "Jalón a la Cara (Face Pulls)"]),
+            ("RUTINA C: PIERNAS", ["Sentadillas con Barra", "Prensa de Piernas", "Extensiones de Cuádriceps", "Elevación de Pantorrillas"])
         ]
     else: 
+        formato = f"FORMATO: Series Tradicionales | {descanso_txt}"
         rutinas = [
-            ("RUTINA A: EMPUJE", ["DB Floor Press", "DB Push Press", "Lateral Raises", "Overhead Triceps"]),
-            ("RUTINA B: TIRÓN", ["DB Row a una mano", "DB Pullover", "Hammer Curls", "Renegade Row"]),
-            ("RUTINA C: PIERNAS", ["Goblet Squat", "DB RDL (Peso Muerto)", "Lunges con Mancuernas", "Calf Raises"])
+            ("RUTINA A: EMPUJE", ["Press de Suelo con Mancuernas", "Push Press con Mancuernas", "Elevaciones Laterales", "Extensión de Tríceps Tras Nuca"]),
+            ("RUTINA B: TIRÓN", ["Remo a una Mano con Mancuerna", "Pullover con Mancuerna", "Curl Martillo", f"Plancha con Toque de Hombros ({iso_t})"]),
+            ("RUTINA C: PIERNAS", ["Sentadilla Copa (Goblet)", "Peso Muerto Rumano con Mancuernas", "Zancadas con Mancuernas", "Elevación de Pantorrillas"])
         ]
 
     titulo, ejs = rutinas[variante]
-    return f"{dia_str} | {titulo}", ejs, s_txt, cardio
+    return f"{dia_str} | {titulo}", ejs, s_txt, cardio, formato, t1, t2
 
 def TacticalBtn(simbolo_texto, color, accion):
     return ft.Container(
@@ -164,7 +147,7 @@ def TacticalBtn(simbolo_texto, color, accion):
     )
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 12.0"
+    page.title = "MAGI OS 13.0"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -185,7 +168,6 @@ def main(page: ft.Page):
                 app_data = page.client_storage.get("magi_data")
                 cargado = True
         except: pass
-        
         if not cargado:
             try:
                 if os.path.exists(DATA_FILE):
@@ -228,9 +210,6 @@ def main(page: ft.Page):
             dlg.open = False
             page.update()
 
-    # ==========================================
-    # VISTAS (PANTALLAS INTERNAS)
-    # ==========================================
     def build_onboarding():
         l = LANG[current_lang]
         tf_peso = ft.TextField(label=l["onb_peso"], keyboard_type=ft.KeyboardType.NUMBER, bgcolor=SURFACE_COLOR, color=NEON_GREEN)
@@ -279,14 +258,8 @@ def main(page: ft.Page):
 
         return ft.Column([
             ft.Text("MINDSET", size=24, color=NEON_PURPLE, weight="bold"),
-            # SOLUCIÓN V12: Contenedor con una columna interna que fuerza el centrado. 100% compatible.
             ft.Container(
-                content=ft.Column(
-                    [texto_quote], 
-                    alignment=ft.MainAxisAlignment.CENTER, 
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER, 
-                    expand=True
-                ),
+                content=ft.Column([texto_quote], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, expand=True),
                 padding=30, bgcolor=CARD_BG, border_radius=10, expand=True
             ),
             ft.ElevatedButton(l["btn_directiva"], bgcolor=NEON_GREEN, color=BG_COLOR, on_click=cambiar_frase)
@@ -377,7 +350,7 @@ def main(page: ft.Page):
         
         dia_semana_actual = datetime.datetime.today().weekday()
         
-        titulo, ejercicios, series_txt, recomendacion_cardio = generar_rutina_del_dia(eq, cond, dia_semana_actual)
+        titulo, ejercicios, series_txt, recomendacion_cardio, formato, t1, t2 = generar_rutina_del_dia(eq, cond, dia_semana_actual)
         
         num_series = int(series_txt.split('x')[0])
         total_checks = len(ejercicios) * num_series
@@ -415,48 +388,36 @@ def main(page: ft.Page):
                     txt_timer.value = f"{mins:02d}:{secs:02d}"
                     txt_timer.color = TEXT_WHITE
                     txt_timer.update() 
-                except Exception:
-                    break
+                except Exception: break
                 time.sleep(1)
             
             try:
                 if timer_running: 
                     for _ in range(5): 
-                        txt_timer.color = DANGER_RED
-                        txt_timer.update()
-                        time.sleep(0.2)
-                        txt_timer.color = BG_COLOR 
-                        txt_timer.update()
-                        time.sleep(0.2)
-                    
-                    txt_timer.color = DANGER_RED
-                    txt_timer.update()
+                        txt_timer.color = DANGER_RED; txt_timer.update(); time.sleep(0.2)
+                        txt_timer.color = BG_COLOR; txt_timer.update(); time.sleep(0.2)
+                    txt_timer.color = DANGER_RED; txt_timer.update()
             except: pass
 
-        def start_timer(s): 
-            threading.Thread(target=run_timer, args=(s,), daemon=True).start()
-            
+        def start_timer(s): threading.Thread(target=run_timer, args=(s,), daemon=True).start()
         def stop_timer(e): 
-            nonlocal timer_running
-            timer_running = False
-            try:
-                txt_timer.value="00:00"
-                txt_timer.color=TEXT_WHITE
-                txt_timer.update()
+            nonlocal timer_running; timer_running = False
+            try: txt_timer.value="00:00"; txt_timer.color=TEXT_WHITE; txt_timer.update()
             except: pass
         
         btn_stop = TacticalBtn("🛑", DANGER_RED, stop_timer)
 
         return ft.Column([
             ft.Row([ft.Text(f"{titulo} ({series_txt})", color=WARNING_ORANGE, size=16, weight="bold", text_align=ft.TextAlign.CENTER)], alignment=ft.MainAxisAlignment.CENTER),
-            ft.Row([ft.Text(recomendacion_cardio, color=NEON_PURPLE, size=12, italic=True, weight="bold")], alignment=ft.MainAxisAlignment.CENTER),
+            ft.Row([ft.Text(formato, color=TEXT_WHITE, size=11, weight="bold")], alignment=ft.MainAxisAlignment.CENTER),
+            ft.Row([ft.Text(recomendacion_cardio, color=NEON_PURPLE, size=11, italic=True)], alignment=ft.MainAxisAlignment.CENTER),
             lbl_sync, prog_bar,
             ft.Container(content=lista_ej, expand=True),
             ft.Container(content=ft.Column([
                 txt_timer,
                 ft.Row([
-                    ft.ElevatedButton("90s", on_click=lambda e: start_timer(90), bgcolor=NEON_GREEN, color=BG_COLOR),
-                    ft.ElevatedButton("120s", on_click=lambda e: start_timer(120), bgcolor=WARNING_ORANGE, color=BG_COLOR),
+                    ft.ElevatedButton(f"{t1}s", on_click=lambda e, s=t1: start_timer(s), bgcolor=NEON_GREEN, color=BG_COLOR),
+                    ft.ElevatedButton(f"{t2}s", on_click=lambda e, s=t2: start_timer(s), bgcolor=WARNING_ORANGE, color=BG_COLOR),
                     btn_stop
                 ], alignment=ft.MainAxisAlignment.CENTER)
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER), bgcolor=CARD_BG, padding=10, border_radius=10)
@@ -471,113 +432,72 @@ def main(page: ft.Page):
         
         lista_comidas = ft.ListView(expand=True, spacing=5)
         registro_actual = [] 
-        
         lbl_tot = ft.Text("C: 0g | K: 0kcal", color=NEON_GREEN, weight="bold", size=16)
 
         def actualizar_pantalla_energia():
             lista_comidas.controls.clear()
             tc = tk = 0.0
             for item in registro_actual:
-                tc += item["c"]
-                tk += item["k"]
-                lista_comidas.controls.append(
-                    ft.Container(
-                        content=ft.Row([
-                            ft.Text(item["alim"].capitalize(), expand=True, color=TEXT_WHITE),
-                            ft.Text(f"C: {item['c']:.1f}g | K: {item['k']:.1f}", color=NEON_PURPLE, weight="bold")
-                        ]), bgcolor=SURFACE_COLOR, padding=10, border_radius=8
-                    )
-                )
-            lbl_tot.value = f"C: {tc:.1f}g | K: {tk:.1f}kcal"
-            page.update()
+                tc += item["c"]; tk += item["k"]
+                lista_comidas.controls.append(ft.Container(
+                    content=ft.Row([ft.Text(item["alim"].capitalize(), expand=True, color=TEXT_WHITE), ft.Text(f"C: {item['c']:.1f}g | K: {item['k']:.1f}", color=NEON_PURPLE, weight="bold")]), 
+                    bgcolor=SURFACE_COLOR, padding=10, border_radius=8
+                ))
+            lbl_tot.value = f"C: {tc:.1f}g | K: {tk:.1f}kcal"; page.update()
 
         tf_new_carbs = ft.TextField(label="Carbs/100g", keyboard_type=ft.KeyboardType.NUMBER, width=120, bgcolor=SURFACE_COLOR)
         tf_new_kcal = ft.TextField(label="Kcal/100g", keyboard_type=ft.KeyboardType.NUMBER, width=120, bgcolor=SURFACE_COLOR)
         
         def save_new_food(e):
             try:
-                c = float(tf_new_carbs.value.replace(',', '.'))
-                k = float(tf_new_kcal.value.replace(',', '.'))
+                c = float(tf_new_carbs.value.replace(',', '.')); k = float(tf_new_kcal.value.replace(',', '.'))
                 alim_raw = tf_alim.value.lower().strip()
                 if not alim_raw: alim_raw = "Nuevo Alimento"
                 app_data["diccionario_magi"][alim_raw] = {"carbs": c, "kcal": k, "cat": "Personal"}
-                guardar_datos()
-                close_dialog_safe(dlg_new_food)
+                guardar_datos(); close_dialog_safe(dlg_new_food)
                 mostrar_alerta("MAGI ha aprendido un nuevo alimento", NEON_GREEN)
-                tf_alim.value = alim_raw 
-                add_food(None) 
-            except:
-                mostrar_alerta("Ingresa números válidos", DANGER_RED)
+                tf_alim.value = alim_raw; add_food(None) 
+            except: mostrar_alerta("Ingresa números válidos", DANGER_RED)
 
         dlg_new_food = ft.AlertDialog(
             title=ft.Text("ENSEÑAR A MAGI", color=NEON_PURPLE),
-            content=ft.Column([
-                ft.Text("Ingresa los macros por cada 100g/ml:"),
-                ft.Row([tf_new_carbs, tf_new_kcal])
-            ], height=120),
-            actions=[
-                ft.ElevatedButton("Cancelar", on_click=lambda e: close_dialog_safe(dlg_new_food), bgcolor=CARD_BG, color=TEXT_WHITE),
-                ft.ElevatedButton("Guardar", on_click=save_new_food, bgcolor=NEON_GREEN, color=BG_COLOR)
-            ]
+            content=ft.Column([ft.Text("Ingresa los macros por cada 100g/ml:"), ft.Row([tf_new_carbs, tf_new_kcal])], height=120),
+            actions=[ft.ElevatedButton("Cancelar", on_click=lambda e: close_dialog_safe(dlg_new_food), bgcolor=CARD_BG, color=TEXT_WHITE), ft.ElevatedButton("Guardar", on_click=save_new_food, bgcolor=NEON_GREEN, color=BG_COLOR)]
         )
 
         def add_food(e):
             alim_raw = tf_alim.value.lower().strip()
             if not alim_raw: return
-            try: 
-                gr = float(tf_gr.value.replace(',', '.'))
-            except: 
-                mostrar_alerta(l["alerta_val"], DANGER_RED); return
+            try: gr = float(tf_gr.value.replace(',', '.'))
+            except: mostrar_alerta(l["alerta_val"], DANGER_RED); return
 
-            dic = app_data["diccionario_magi"]
-            alim_final = alim_raw
-            
+            dic = app_data["diccionario_magi"]; alim_final = alim_raw
             if alim_raw not in dic:
                 matches = difflib.get_close_matches(alim_raw, dic.keys(), n=1, cutoff=0.7)
                 if matches: 
-                    alim_final = matches[0]
-                    lbl_status.value = f"Fuzzy: '{alim_raw}' ➔ '{alim_final}'"
-                else:
-                    tf_new_carbs.value = ""
-                    tf_new_kcal.value = ""
-                    open_dialog_safe(dlg_new_food)
-                    return
+                    alim_final = matches[0]; lbl_status.value = f"Fuzzy: '{alim_raw}' ➔ '{alim_final}'"
+                else: tf_new_carbs.value = ""; tf_new_kcal.value = ""; open_dialog_safe(dlg_new_food); return
             
             if alim_final in dic:
-                c100 = dic[alim_final]["carbs"]; k100 = dic[alim_final]["kcal"]
-                c_calc = (gr*c100)/100
-                k_calc = (gr*k100)/100
-                
+                c_calc = (gr*dic[alim_final]["carbs"])/100; k_calc = (gr*dic[alim_final]["kcal"])/100
                 registro_actual.append({"alim": alim_final, "c": c_calc, "k": k_calc})
-                tf_alim.value = ""; tf_gr.value = ""
-                actualizar_pantalla_energia()
+                tf_alim.value = ""; tf_gr.value = ""; actualizar_pantalla_energia()
 
-        def limpiar(e): 
-            registro_actual.clear()
-            actualizar_pantalla_energia()
+        def limpiar(e): registro_actual.clear(); actualizar_pantalla_energia()
 
         btn_eliminar = TacticalBtn("🗑️", DANGER_RED, limpiar)
         btn_ensenar = TacticalBtn("🧠", NEON_PURPLE, lambda e: open_dialog_safe(dlg_new_food))
 
         return ft.Column([
             ft.Row([dd_mom, tf_alim]),
-            ft.Row([
-                tf_gr, 
-                ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), 
-                btn_ensenar, 
-                btn_eliminar
-            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), btn_ensenar, btn_eliminar], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             lbl_status,
             ft.Container(content=lista_comidas, expand=True, bgcolor=CARD_BG, border_radius=10, padding=10),
             ft.Container(content=ft.Row([lbl_tot], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=10)
         ], expand=True)
 
-    # ==========================================
-    # MANIOBRA NAVEGACIÓN
-    # ==========================================
     def navigate_custom(idx):
-        nonlocal current_view_idx
-        current_view_idx = idx
+        nonlocal current_view_idx; current_view_idx = idx
         if idx == 0: master_container.content = view_mindset()
         elif idx == 1: master_container.content = view_estado()
         elif idx == 2: master_container.content = view_combate()
@@ -586,65 +506,26 @@ def main(page: ft.Page):
 
     def CustomNavBtn(emoji, text, idx):
         return ft.Container(
-            content=ft.Column([
-                ft.Text(emoji, size=22),
-                ft.Text(text, size=11, color=TEXT_WHITE, weight="bold")
-            ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=2),
+            content=ft.Column([ft.Text(emoji, size=22), ft.Text(text, size=11, color=TEXT_WHITE, weight="bold")], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=2),
             on_click=lambda e: navigate_custom(idx), expand=True, ink=True, padding=10      
         )
 
     bottom_nav = ft.Container(bgcolor=CARD_BG, height=70, margin=0, padding=0)
 
-    def reset_app(e):
-        app_data["perfil"]["configurado"] = False
-        guardar_datos()
-        show_onboarding_interface()
-
-    def toggle_lang(e):
-        nonlocal current_lang
-        current_lang = "en" if current_lang == "es" else "es"
-        show_main_interface() 
+    def reset_app(e): app_data["perfil"]["configurado"] = False; guardar_datos(); show_onboarding_interface()
+    def toggle_lang(e): nonlocal current_lang; current_lang = "en" if current_lang == "es" else "es"; show_main_interface() 
 
     def show_onboarding_interface():
-        page.appbar = None
-        bottom_nav.visible = False
-        master_container.content = build_onboarding()
-        page.update()
+        page.appbar = None; bottom_nav.visible = False; master_container.content = build_onboarding(); page.update()
 
     def show_main_interface():
-        titulo_app = "MAGI OS 12.0 (EN)" if current_lang == "en" else "MAGI OS 12.0 (ES)"
-        page.appbar = ft.AppBar(
-            title=ft.Text(titulo_app, color=NEON_GREEN, weight="bold", size=18),
-            bgcolor=CARD_BG,
-            actions=[
-                TacticalBtn("🌍", TEXT_WHITE, toggle_lang),
-                TacticalBtn("⚙️", WARNING_ORANGE, reset_app),
-            ]
-        )
-        
-        lbl_mindset = "Mindset"
-        lbl_estado = "Estado" if current_lang == "es" else "Status"
-        lbl_combate = "Combate" if current_lang == "es" else "Combat"
-        lbl_energia = "Energía" if current_lang == "es" else "Energy"
+        page.appbar = ft.AppBar(title=ft.Text("MAGI OS 13.0", color=NEON_GREEN, weight="bold", size=18), bgcolor=CARD_BG, actions=[TacticalBtn("🌍", TEXT_WHITE, toggle_lang), TacticalBtn("⚙️", WARNING_ORANGE, reset_app)])
+        lbl_mindset = "Mindset"; lbl_estado = "Estado" if current_lang == "es" else "Status"; lbl_combate = "Combate" if current_lang == "es" else "Combat"; lbl_energia = "Energía" if current_lang == "es" else "Energy"
+        bottom_nav.content = ft.Row([CustomNavBtn("💡", lbl_mindset, 0), CustomNavBtn("🩸", lbl_estado, 1), CustomNavBtn("⚔️", lbl_combate, 2), CustomNavBtn("🔋", lbl_energia, 3)], alignment=ft.MainAxisAlignment.SPACE_AROUND, spacing=0)
+        bottom_nav.visible = True; navigate_custom(current_view_idx)
 
-        bottom_nav.content = ft.Row([
-            CustomNavBtn("💡", lbl_mindset, 0),
-            CustomNavBtn("🩸", lbl_estado, 1),
-            CustomNavBtn("⚔️", lbl_combate, 2),
-            CustomNavBtn("🔋", lbl_energia, 3),
-        ], alignment=ft.MainAxisAlignment.SPACE_AROUND, spacing=0)
-        
-        bottom_nav.visible = True
-        navigate_custom(current_view_idx)
-
-    # ==========================================
-    # ARRANQUE DE LA APLICACIÓN
-    # ==========================================
     page.add(master_container, bottom_nav)
-    
-    if app_data.get("perfil", {}).get("configurado", False):
-        show_main_interface()
-    else:
-        show_onboarding_interface()
+    if app_data.get("perfil", {}).get("configurado", False): show_main_interface()
+    else: show_onboarding_interface()
 
 ft.app(target=main)
