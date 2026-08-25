@@ -14,10 +14,10 @@ DANGER_RED = "#EF4444"
 TEXT_WHITE = "#F8FAFC"
 TEXT_MUTED = "#94A3B8"        
 
-DATA_FILE = "magi_data_v13.json"
+DATA_FILE = "magi_data_v14.json"
 
 # ==========================================
-# CEREBRO MAGI Y DICCIONARIO
+# CEREBRO MAGI Y DICCIONARIO (COLOMBIA)
 # ==========================================
 ALIMENTOS_OFFLINE = {
     "es": {
@@ -89,21 +89,19 @@ LANG = {
 }
 
 # ==========================================
-# RUTINAS MAGI V13 (Español, Tiempos, Planchas)
+# RUTINAS MAGI V14
 # ==========================================
 def generar_rutina_del_dia(eq_idx, cond, dia_idx):
-    # cond viene como un entero de 1 a 5
     s_txt = "3x12" if cond <= 2 else ("4x12" if cond == 3 else "4x15")
     cardio = "CARDIO OPCIONAL: 15-20 min." if cond >= 3 else "CARDIO OPCIONAL: 10 min."
     
-    # Asignación dinámica de descansos y tiempos de isometría
-    if cond <= 2: # Sedentario / Principiante
+    if cond <= 2: 
         t1, t2 = 90, 120
         iso_t = "30s"
-    elif cond == 3: # Intermedio
+    elif cond == 3: 
         t1, t2 = 60, 90
         iso_t = "45s"
-    else: # Avanzado / Elite
+    else: 
         t1, t2 = 45, 60
         iso_t = "60s"
         
@@ -147,7 +145,7 @@ def TacticalBtn(simbolo_texto, color, accion):
     )
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 13.0"
+    page.title = "MAGI OS 14.0"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -346,11 +344,11 @@ def main(page: ft.Page):
     def view_combate():
         l = LANG[current_lang]
         eq = app_data["perfil"].get("equipo_idx", 1)
-        cond = app_data["perfil"].get("acondicionamiento", 3)
+        cond = app_data["perfil"].get("acondicionamiento", 2)
         
         dia_semana_actual = datetime.datetime.today().weekday()
         
-        titulo, ejercicios, series_txt, recomendacion_cardio, formato, t1, t2 = generar_rutina_del_dia(eq, cond, dia_semana_actual)
+        titulo, ejercicios, series_txt, recomendacion_cardio, formato_txt, t1, t2 = generar_rutina_del_dia(eq, cond, dia_semana_actual)
         
         num_series = int(series_txt.split('x')[0])
         total_checks = len(ejercicios) * num_series
@@ -388,28 +386,41 @@ def main(page: ft.Page):
                     txt_timer.value = f"{mins:02d}:{secs:02d}"
                     txt_timer.color = TEXT_WHITE
                     txt_timer.update() 
-                except Exception: break
+                except Exception:
+                    break
                 time.sleep(1)
             
             try:
                 if timer_running: 
                     for _ in range(5): 
-                        txt_timer.color = DANGER_RED; txt_timer.update(); time.sleep(0.2)
-                        txt_timer.color = BG_COLOR; txt_timer.update(); time.sleep(0.2)
-                    txt_timer.color = DANGER_RED; txt_timer.update()
+                        txt_timer.color = DANGER_RED
+                        txt_timer.update()
+                        time.sleep(0.2)
+                        txt_timer.color = BG_COLOR 
+                        txt_timer.update()
+                        time.sleep(0.2)
+                    
+                    txt_timer.color = DANGER_RED
+                    txt_timer.update()
             except: pass
 
-        def start_timer(s): threading.Thread(target=run_timer, args=(s,), daemon=True).start()
+        def start_timer(s): 
+            threading.Thread(target=run_timer, args=(s,), daemon=True).start()
+            
         def stop_timer(e): 
-            nonlocal timer_running; timer_running = False
-            try: txt_timer.value="00:00"; txt_timer.color=TEXT_WHITE; txt_timer.update()
+            nonlocal timer_running
+            timer_running = False
+            try:
+                txt_timer.value="00:00"
+                txt_timer.color=TEXT_WHITE
+                txt_timer.update()
             except: pass
         
         btn_stop = TacticalBtn("🛑", DANGER_RED, stop_timer)
 
         return ft.Column([
             ft.Row([ft.Text(f"{titulo} ({series_txt})", color=WARNING_ORANGE, size=16, weight="bold", text_align=ft.TextAlign.CENTER)], alignment=ft.MainAxisAlignment.CENTER),
-            ft.Row([ft.Text(formato, color=TEXT_WHITE, size=11, weight="bold")], alignment=ft.MainAxisAlignment.CENTER),
+            ft.Row([ft.Text(formato_txt, color=TEXT_WHITE, size=12, weight="bold")], alignment=ft.MainAxisAlignment.CENTER),
             ft.Row([ft.Text(recomendacion_cardio, color=NEON_PURPLE, size=11, italic=True)], alignment=ft.MainAxisAlignment.CENTER),
             lbl_sync, prog_bar,
             ft.Container(content=lista_ej, expand=True),
@@ -432,72 +443,113 @@ def main(page: ft.Page):
         
         lista_comidas = ft.ListView(expand=True, spacing=5)
         registro_actual = [] 
+        
         lbl_tot = ft.Text("C: 0g | K: 0kcal", color=NEON_GREEN, weight="bold", size=16)
 
         def actualizar_pantalla_energia():
             lista_comidas.controls.clear()
             tc = tk = 0.0
             for item in registro_actual:
-                tc += item["c"]; tk += item["k"]
-                lista_comidas.controls.append(ft.Container(
-                    content=ft.Row([ft.Text(item["alim"].capitalize(), expand=True, color=TEXT_WHITE), ft.Text(f"C: {item['c']:.1f}g | K: {item['k']:.1f}", color=NEON_PURPLE, weight="bold")]), 
-                    bgcolor=SURFACE_COLOR, padding=10, border_radius=8
-                ))
-            lbl_tot.value = f"C: {tc:.1f}g | K: {tk:.1f}kcal"; page.update()
+                tc += item["c"]
+                tk += item["k"]
+                lista_comidas.controls.append(
+                    ft.Container(
+                        content=ft.Row([
+                            ft.Text(item["alim"].capitalize(), expand=True, color=TEXT_WHITE),
+                            ft.Text(f"C: {item['c']:.1f}g | K: {item['k']:.1f}", color=NEON_PURPLE, weight="bold")
+                        ]), bgcolor=SURFACE_COLOR, padding=10, border_radius=8
+                    )
+                )
+            lbl_tot.value = f"C: {tc:.1f}g | K: {tk:.1f}kcal"
+            page.update()
 
         tf_new_carbs = ft.TextField(label="Carbs/100g", keyboard_type=ft.KeyboardType.NUMBER, width=120, bgcolor=SURFACE_COLOR)
         tf_new_kcal = ft.TextField(label="Kcal/100g", keyboard_type=ft.KeyboardType.NUMBER, width=120, bgcolor=SURFACE_COLOR)
         
         def save_new_food(e):
             try:
-                c = float(tf_new_carbs.value.replace(',', '.')); k = float(tf_new_kcal.value.replace(',', '.'))
+                c = float(tf_new_carbs.value.replace(',', '.'))
+                k = float(tf_new_kcal.value.replace(',', '.'))
                 alim_raw = tf_alim.value.lower().strip()
                 if not alim_raw: alim_raw = "Nuevo Alimento"
                 app_data["diccionario_magi"][alim_raw] = {"carbs": c, "kcal": k, "cat": "Personal"}
-                guardar_datos(); close_dialog_safe(dlg_new_food)
+                guardar_datos()
+                close_dialog_safe(dlg_new_food)
                 mostrar_alerta("MAGI ha aprendido un nuevo alimento", NEON_GREEN)
-                tf_alim.value = alim_raw; add_food(None) 
-            except: mostrar_alerta("Ingresa números válidos", DANGER_RED)
+                tf_alim.value = alim_raw 
+                add_food(None) 
+            except:
+                mostrar_alerta("Ingresa números válidos", DANGER_RED)
 
         dlg_new_food = ft.AlertDialog(
             title=ft.Text("ENSEÑAR A MAGI", color=NEON_PURPLE),
-            content=ft.Column([ft.Text("Ingresa los macros por cada 100g/ml:"), ft.Row([tf_new_carbs, tf_new_kcal])], height=120),
-            actions=[ft.ElevatedButton("Cancelar", on_click=lambda e: close_dialog_safe(dlg_new_food), bgcolor=CARD_BG, color=TEXT_WHITE), ft.ElevatedButton("Guardar", on_click=save_new_food, bgcolor=NEON_GREEN, color=BG_COLOR)]
+            content=ft.Column([
+                ft.Text("Ingresa los macros por cada 100g/ml:"),
+                ft.Row([tf_new_carbs, tf_new_kcal])
+            ], height=120),
+            actions=[
+                ft.ElevatedButton("Cancelar", on_click=lambda e: close_dialog_safe(dlg_new_food), bgcolor=CARD_BG, color=TEXT_WHITE),
+                ft.ElevatedButton("Guardar", on_click=save_new_food, bgcolor=NEON_GREEN, color=BG_COLOR)
+            ]
         )
 
         def add_food(e):
             alim_raw = tf_alim.value.lower().strip()
             if not alim_raw: return
-            try: gr = float(tf_gr.value.replace(',', '.'))
-            except: mostrar_alerta(l["alerta_val"], DANGER_RED); return
+            try: 
+                gr = float(tf_gr.value.replace(',', '.'))
+            except: 
+                mostrar_alerta(l["alerta_val"], DANGER_RED); return
 
-            dic = app_data["diccionario_magi"]; alim_final = alim_raw
+            dic = app_data["diccionario_magi"]
+            alim_final = alim_raw
+            
             if alim_raw not in dic:
                 matches = difflib.get_close_matches(alim_raw, dic.keys(), n=1, cutoff=0.7)
                 if matches: 
-                    alim_final = matches[0]; lbl_status.value = f"Fuzzy: '{alim_raw}' ➔ '{alim_final}'"
-                else: tf_new_carbs.value = ""; tf_new_kcal.value = ""; open_dialog_safe(dlg_new_food); return
+                    alim_final = matches[0]
+                    lbl_status.value = f"Fuzzy: '{alim_raw}' ➔ '{alim_final}'"
+                else:
+                    tf_new_carbs.value = ""
+                    tf_new_kcal.value = ""
+                    open_dialog_safe(dlg_new_food)
+                    return
             
             if alim_final in dic:
-                c_calc = (gr*dic[alim_final]["carbs"])/100; k_calc = (gr*dic[alim_final]["kcal"])/100
+                c100 = dic[alim_final]["carbs"]; k100 = dic[alim_final]["kcal"]
+                c_calc = (gr*c100)/100
+                k_calc = (gr*k100)/100
+                
                 registro_actual.append({"alim": alim_final, "c": c_calc, "k": k_calc})
-                tf_alim.value = ""; tf_gr.value = ""; actualizar_pantalla_energia()
+                tf_alim.value = ""; tf_gr.value = ""
+                actualizar_pantalla_energia()
 
-        def limpiar(e): registro_actual.clear(); actualizar_pantalla_energia()
+        def limpiar(e): 
+            registro_actual.clear()
+            actualizar_pantalla_energia()
 
         btn_eliminar = TacticalBtn("🗑️", DANGER_RED, limpiar)
         btn_ensenar = TacticalBtn("🧠", NEON_PURPLE, lambda e: open_dialog_safe(dlg_new_food))
 
         return ft.Column([
             ft.Row([dd_mom, tf_alim]),
-            ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), btn_ensenar, btn_eliminar], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([
+                tf_gr, 
+                ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), 
+                btn_ensenar, 
+                btn_eliminar
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             lbl_status,
             ft.Container(content=lista_comidas, expand=True, bgcolor=CARD_BG, border_radius=10, padding=10),
             ft.Container(content=ft.Row([lbl_tot], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=10)
         ], expand=True)
 
+    # ==========================================
+    # MANIOBRA NAVEGACIÓN
+    # ==========================================
     def navigate_custom(idx):
-        nonlocal current_view_idx; current_view_idx = idx
+        nonlocal current_view_idx
+        current_view_idx = idx
         if idx == 0: master_container.content = view_mindset()
         elif idx == 1: master_container.content = view_estado()
         elif idx == 2: master_container.content = view_combate()
@@ -506,26 +558,65 @@ def main(page: ft.Page):
 
     def CustomNavBtn(emoji, text, idx):
         return ft.Container(
-            content=ft.Column([ft.Text(emoji, size=22), ft.Text(text, size=11, color=TEXT_WHITE, weight="bold")], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=2),
+            content=ft.Column([
+                ft.Text(emoji, size=22),
+                ft.Text(text, size=11, color=TEXT_WHITE, weight="bold")
+            ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=2),
             on_click=lambda e: navigate_custom(idx), expand=True, ink=True, padding=10      
         )
 
     bottom_nav = ft.Container(bgcolor=CARD_BG, height=70, margin=0, padding=0)
 
-    def reset_app(e): app_data["perfil"]["configurado"] = False; guardar_datos(); show_onboarding_interface()
-    def toggle_lang(e): nonlocal current_lang; current_lang = "en" if current_lang == "es" else "es"; show_main_interface() 
+    def reset_app(e):
+        app_data["perfil"]["configurado"] = False
+        guardar_datos()
+        show_onboarding_interface()
+
+    def toggle_lang(e):
+        nonlocal current_lang
+        current_lang = "en" if current_lang == "es" else "es"
+        show_main_interface() 
 
     def show_onboarding_interface():
-        page.appbar = None; bottom_nav.visible = False; master_container.content = build_onboarding(); page.update()
+        page.appbar = None
+        bottom_nav.visible = False
+        master_container.content = build_onboarding()
+        page.update()
 
     def show_main_interface():
-        page.appbar = ft.AppBar(title=ft.Text("MAGI OS 13.0", color=NEON_GREEN, weight="bold", size=18), bgcolor=CARD_BG, actions=[TacticalBtn("🌍", TEXT_WHITE, toggle_lang), TacticalBtn("⚙️", WARNING_ORANGE, reset_app)])
-        lbl_mindset = "Mindset"; lbl_estado = "Estado" if current_lang == "es" else "Status"; lbl_combate = "Combate" if current_lang == "es" else "Combat"; lbl_energia = "Energía" if current_lang == "es" else "Energy"
-        bottom_nav.content = ft.Row([CustomNavBtn("💡", lbl_mindset, 0), CustomNavBtn("🩸", lbl_estado, 1), CustomNavBtn("⚔️", lbl_combate, 2), CustomNavBtn("🔋", lbl_energia, 3)], alignment=ft.MainAxisAlignment.SPACE_AROUND, spacing=0)
-        bottom_nav.visible = True; navigate_custom(current_view_idx)
+        titulo_app = "MAGI OS 14.0 (EN)" if current_lang == "en" else "MAGI OS 14.0 (ES)"
+        page.appbar = ft.AppBar(
+            title=ft.Text(titulo_app, color=NEON_GREEN, weight="bold", size=18),
+            bgcolor=CARD_BG,
+            actions=[
+                TacticalBtn("🌍", TEXT_WHITE, toggle_lang),
+                TacticalBtn("⚙️", WARNING_ORANGE, reset_app),
+            ]
+        )
+        
+        lbl_mindset = "Mindset"
+        lbl_estado = "Estado" if current_lang == "es" else "Status"
+        lbl_combate = "Combate" if current_lang == "es" else "Combat"
+        lbl_energia = "Energía" if current_lang == "es" else "Energy"
 
+        bottom_nav.content = ft.Row([
+            CustomNavBtn("💡", lbl_mindset, 0),
+            CustomNavBtn("🩸", lbl_estado, 1),
+            CustomNavBtn("⚔️", lbl_combate, 2),
+            CustomNavBtn("🔋", lbl_energia, 3),
+        ], alignment=ft.MainAxisAlignment.SPACE_AROUND, spacing=0)
+        
+        bottom_nav.visible = True
+        navigate_custom(current_view_idx)
+
+    # ==========================================
+    # ARRANQUE DE LA APLICACIÓN
+    # ==========================================
     page.add(master_container, bottom_nav)
-    if app_data.get("perfil", {}).get("configurado", False): show_main_interface()
-    else: show_onboarding_interface()
+    
+    if app_data.get("perfil", {}).get("configurado", False):
+        show_main_interface()
+    else:
+        show_onboarding_interface()
 
 ft.app(target=main)
