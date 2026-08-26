@@ -14,10 +14,10 @@ DANGER_RED = "#EF4444"
 TEXT_WHITE = "#F8FAFC"
 TEXT_MUTED = "#94A3B8"        
 
-DATA_FILE = "magi_data_v14.json"
+DATA_FILE = "magi_data_v15.json"
 
 # ==========================================
-# CEREBRO MAGI Y DICCIONARIO (COLOMBIA)
+# CEREBRO MAGI Y DICCIONARIO (COLOMBIA ÉLITE)
 # ==========================================
 ALIMENTOS_OFFLINE = {
     "es": {
@@ -89,7 +89,7 @@ LANG = {
 }
 
 # ==========================================
-# RUTINAS MAGI V14
+# RUTINAS MAGI V15
 # ==========================================
 def generar_rutina_del_dia(eq_idx, cond, dia_idx):
     s_txt = "3x12" if cond <= 2 else ("4x12" if cond == 3 else "4x15")
@@ -145,7 +145,7 @@ def TacticalBtn(simbolo_texto, color, accion):
     )
 
 def main(page: ft.Page):
-    page.title = "MAGI OS 14.0"
+    page.title = "MAGI OS 15.0"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = BG_COLOR
     page.padding = 0
@@ -254,10 +254,16 @@ def main(page: ft.Page):
             except: texto_quote.value = random.choice(l["quotes"])
             page.update()
 
+        # BLINDAJE V15: El centrado solo se usa en las Columnas (infalible en todas las versiones)
         return ft.Column([
             ft.Text("MINDSET", size=24, color=NEON_PURPLE, weight="bold"),
             ft.Container(
-                content=ft.Column([texto_quote], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, expand=True),
+                content=ft.Column(
+                    [texto_quote], 
+                    alignment=ft.MainAxisAlignment.CENTER, 
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER, 
+                    expand=True
+                ),
                 padding=30, bgcolor=CARD_BG, border_radius=10, expand=True
             ),
             ft.ElevatedButton(l["btn_directiva"], bgcolor=NEON_GREEN, color=BG_COLOR, on_click=cambiar_frase)
@@ -584,7 +590,7 @@ def main(page: ft.Page):
         page.update()
 
     def show_main_interface():
-        titulo_app = "MAGI OS 14.0 (EN)" if current_lang == "en" else "MAGI OS 14.0 (ES)"
+        titulo_app = "MAGI OS 15.0 (EN)" if current_lang == "en" else "MAGI OS 15.0 (ES)"
         page.appbar = ft.AppBar(
             title=ft.Text(titulo_app, color=NEON_GREEN, weight="bold", size=18),
             bgcolor=CARD_BG,
