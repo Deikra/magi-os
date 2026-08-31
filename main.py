@@ -1,5 +1,5 @@
 import flet as ft
-import datetime, random, requests, difflib, time, json, os, threading
+import datetime, random, difflib, time, json, os, threading
 
 BG_COLOR = "#08040C"          
 CARD_BG = "#13071E"           
@@ -11,7 +11,7 @@ DANGER_RED = "#EF4444"
 TEXT_WHITE = "#F8FAFC"
 TEXT_MUTED = "#94A3B8"        
 
-DATA_FILE = "magi_data_v16.json"
+DATA_FILE = "magi_data_v17.json"
 
 ALIMENTOS_OFFLINE = {
     "es": {
@@ -21,7 +21,6 @@ ALIMENTOS_OFFLINE = {
         "queso": {"carbs": 1.3, "kcal": 402, "cat": "Natural"}, "arroz": {"carbs": 28.0, "kcal": 130, "cat": "Natural"},
         "pasta": {"carbs": 30.0, "kcal": 131, "cat": "Preparada"}, "pan": {"carbs": 49.0, "kcal": 265, "cat": "Preparada"},
         "papa": {"carbs": 17.0, "kcal": 77, "cat": "Natural"}, "manzana": {"carbs": 14.0, "kcal": 52, "cat": "Natural"},
-        
         "chocoramo": {"carbs": 55.0, "kcal": 420, "cat": "Snack"}, "gansito": {"carbs": 62.0, "kcal": 410, "cat": "Snack"},
         "papas margarita limon": {"carbs": 52.0, "kcal": 536, "cat": "Snack"}, "galletas tosh miel": {"carbs": 71.0, "kcal": 430, "cat": "Snack"},
         "galletas saltin noel": {"carbs": 72.0, "kcal": 430, "cat": "Snack"}, "chocolatina jet": {"carbs": 62.0, "kcal": 530, "cat": "Snack"},
@@ -47,8 +46,8 @@ LANG = {
         "imc_res": "Análisis Listo", "btn_directiva": "NUEVA DIRECTIVA", "reg_gl": "Ingreso (mg/dL)", 
         "filtros_gl": ["Hoy", "Ayer", "7 Días", "30 Días", "Todo"], "gl_momentos": ["Ayunas", "Post-comida", "Otro"], 
         "combate_title": "MISIÓN:", "sync_rate": "TASA DE SINC.:", "momento": "Momento", "alimento": "Alimento", "gramos": "Gramos",
-        "btn_anadir": "AÑADIR", "btn_ensenar": "ENSEÑAR MAGI", "momentos_lista": ["Desayuno", "Almuerzo", "Cena", "Snack"],
-        "alerta_val": "Dato inválido.", "quotes": ["No debes huir. Entrena.", "La disciplina es tu escudo."]
+        "btn_anadir": "AÑADIR", "btn_ensenar": "NUEVO ALIMENTO", "momentos_lista": ["Desayuno", "Almuerzo", "Cena", "Snack"],
+        "alerta_val": "Dato inválido."
     },
     "en": {
         "onb_titulo": "PILOT SYNC", "onb_peso": "Weight (kg)", "onb_altura": "Height (cm)",
@@ -57,8 +56,8 @@ LANG = {
         "imc_res": "Analysis Ready", "btn_directiva": "NEW DIRECTIVE", "reg_gl": "Input (mg/dL)", 
         "filtros_gl": ["Today", "Yesterday", "7 Days", "30 Days", "All"], "gl_momentos": ["Fasting", "Post-meal", "Other"], 
         "combate_title": "MISSION:", "sync_rate": "SYNC RATE:", "momento": "Meal", "alimento": "Food", "gramos": "Grams",
-        "btn_anadir": "ADD", "btn_ensenar": "TEACH MAGI", "momentos_lista": ["Breakfast", "Lunch", "Dinner", "Snack"],
-        "alerta_val": "Invalid data.", "quotes": ["You mustn't run away. Train.", "Discipline is your shield."]
+        "btn_anadir": "ADD", "btn_ensenar": "NEW FOOD", "momentos_lista": ["Breakfast", "Lunch", "Dinner", "Snack"],
+        "alerta_val": "Invalid data."
     }
 }
 
@@ -88,7 +87,7 @@ def generar_rutina_del_dia(eq_idx, cond, dia_idx):
     if eq_idx == 0: 
         formato = f"FORMATO: Por Bloques (Circuito) | {descanso_txt}"
         rutinas = [
-            ("RUTINA A: EMPUJE", ["Flexiones Clásicas", "Fondos (o en Silla)", "Flexiones en Pica", f"Plancha Estricta ({iso_t})"]),
+            ("RUTINA A: EMPUJE", ["Flexiones Clásicas", "Fondos en Silla", "Flexiones en Pica", f"Plancha Estricta ({iso_t})"]),
             ("RUTINA B: TIRÓN Y CORE", ["Dominadas", f"Hollow Body ({iso_t})", f"Superman ({iso_t})", "Escaladores"]),
             ("RUTINA C: PIERNAS", ["Sentadillas Libres", "Zancadas Alternas", "Puentes de Glúteo", "Elevación de Pantorrillas"])
         ]
@@ -97,7 +96,7 @@ def generar_rutina_del_dia(eq_idx, cond, dia_idx):
         rutinas = [
             ("RUTINA A: PECHO Y TRÍCEPS", ["Press de Banca", "Press Inclinado", "Extensión de Tríceps", "Aperturas"]),
             ("RUTINA B: ESPALDA Y BÍCEPS", ["Jalón al Pecho", "Remo Sentado", "Curl de Bíceps", "Face Pulls"]),
-            ("RUTINA C: PIERNAS", ["Sentadillas con Barra", "Prensa de Piernas", "Extensiones", "Elevación de Pantorrillas"])
+            ("RUTINA C: PIERNAS", ["Sentadillas con Barra", "Prensa de Piernas", "Extensiones de Cuádriceps", "Elevación de Pantorrillas"])
         ]
     else: 
         formato = f"FORMATO: Series Tradicionales | {descanso_txt}"
@@ -111,7 +110,7 @@ def generar_rutina_del_dia(eq_idx, cond, dia_idx):
     return f"{dia_str} | {titulo}", ejs, s_txt, cardio, formato, t1, t2
 
 def TacticalBtn(simbolo_texto, color, accion):
-    return ft.Container(content=ft.Text(simbolo_texto, size=24, color=color), on_click=accion, padding=10, ink=True, border_radius=50)
+    return ft.Container(content=ft.Text(simbolo_texto, size=14, weight="bold", color=color), on_click=accion, padding=10, ink=True, border_radius=5)
 
 def main(page: ft.Page):
     page.title = "MAGI OS"
@@ -121,7 +120,7 @@ def main(page: ft.Page):
     page.spacing = 0
     
     master_container = ft.Container(expand=True, padding=10)
-    current_view_idx = 0
+    current_view_idx = 1 # 1 corresponde a Combate (0 es Estado, 2 es Energía)
     current_lang = "es"
     
     app_data = {"perfil": {"configurado": False}, "glicemias": [], "diccionario_magi": {}}
@@ -147,6 +146,15 @@ def main(page: ft.Page):
         sb = ft.SnackBar(content=ft.Text(texto, color=TEXT_WHITE, weight="bold"), bgcolor=color, duration=2000)
         page.overlay.append(sb)
         sb.open = True
+        page.update()
+
+    def open_dialog_safe(dlg):
+        page.overlay.append(dlg)
+        dlg.open = True
+        page.update()
+
+    def close_dialog_safe(dlg):
+        dlg.open = False
         page.update()
 
     def build_onboarding():
@@ -177,16 +185,6 @@ def main(page: ft.Page):
             ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER), padding=30, expand=True
         )
 
-    def view_mindset():
-        l = LANG[current_lang]
-        texto_quote = ft.Text(random.choice(l["quotes"]), size=18, italic=True, color=TEXT_WHITE, text_align=ft.TextAlign.CENTER)
-        def cambiar_frase(e): texto_quote.value = random.choice(l["quotes"]); page.update()
-        return ft.Column([
-            ft.Text("MINDSET", size=24, color=NEON_PURPLE, weight="bold"),
-            ft.Container(content=ft.Column([texto_quote], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, expand=True), padding=30, bgcolor=CARD_BG, border_radius=10, expand=True),
-            ft.ElevatedButton(l["btn_directiva"], bgcolor=NEON_GREEN, color=BG_COLOR, on_click=cambiar_frase)
-        ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, expand=True)
-
     def view_estado():
         l = LANG[current_lang]
         tf_gl = ft.TextField(label=l["reg_gl"], width=120, keyboard_type=ft.KeyboardType.NUMBER, bgcolor=SURFACE_COLOR)
@@ -211,7 +209,7 @@ def main(page: ft.Page):
 
         actualizar_datos_estado()
         return ft.Column([
-            ft.Row([tf_gl, dd_mom, TacticalBtn("💾", NEON_PURPLE, guardar_gl)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([tf_gl, dd_mom, TacticalBtn("GUARDAR", NEON_PURPLE, guardar_gl)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             ft.Container(content=historial_lista, expand=True, bgcolor=CARD_BG, border_radius=10, padding=10)
         ], expand=True)
 
@@ -239,7 +237,15 @@ def main(page: ft.Page):
         for ej in ejercicios:
             row_checks = ft.Row([ft.Checkbox(on_change=update_progreso, fill_color=NEON_PURPLE) for _ in range(num_series)])
             checks.extend(row_checks.controls)
-            lista_ej.controls.append(ft.Container(content=ft.Column([ft.Text(ej, color=TEXT_WHITE), row_checks]), bgcolor=CARD_BG, padding=10, border_radius=8))
+            
+            # Botón de Video Tutorial
+            url_busqueda = f"https://www.youtube.com/results?search_query=como+hacer+{ej.replace(' ', '+')}+ejercicio"
+            btn_tutorial = ft.TextButton(text="VER TUTORIAL", url=url_busqueda, style=ft.ButtonStyle(color=NEON_PURPLE))
+            
+            lista_ej.controls.append(ft.Container(content=ft.Column([
+                ft.Row([ft.Text(ej, color=TEXT_WHITE, weight="bold", expand=True), btn_tutorial]),
+                row_checks
+            ]), bgcolor=CARD_BG, padding=10, border_radius=8))
 
         txt_timer = ft.Text("00:00", size=35, weight="bold", color=TEXT_WHITE)
         timer_running = False
@@ -257,6 +263,7 @@ def main(page: ft.Page):
         return ft.Column([
             ft.Row([ft.Text(f"{titulo} ({series_txt})", color=WARNING_ORANGE, size=16, weight="bold")], alignment=ft.MainAxisAlignment.CENTER),
             ft.Row([ft.Text(formato_txt, color=TEXT_WHITE, size=12, weight="bold")], alignment=ft.MainAxisAlignment.CENTER),
+            ft.Row([ft.Text(recomendacion_cardio, color=NEON_PURPLE, size=11, italic=True)], alignment=ft.MainAxisAlignment.CENTER),
             lbl_sync, prog_bar,
             ft.Container(content=lista_ej, expand=True),
             ft.Container(content=ft.Column([
@@ -264,16 +271,20 @@ def main(page: ft.Page):
                 ft.Row([
                     ft.ElevatedButton(f"{t1}s", on_click=lambda e, s=t1: start_timer(s), bgcolor=NEON_GREEN, color=BG_COLOR),
                     ft.ElevatedButton(f"{t2}s", on_click=lambda e, s=t2: start_timer(s), bgcolor=WARNING_ORANGE, color=BG_COLOR),
-                    TacticalBtn("🛑", DANGER_RED, stop_timer)
+                    TacticalBtn("DETENER", DANGER_RED, stop_timer)
                 ], alignment=ft.MainAxisAlignment.CENTER)
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER), bgcolor=CARD_BG, padding=10, border_radius=10)
         ], expand=True)
 
     def view_energia():
         l = LANG[current_lang]
-        dd_mom = ft.Dropdown(options=[ft.dropdown.Option(m) for m in l["momentos_lista"]], value=l["momentos_lista"][0], width=120, bgcolor=SURFACE_COLOR)
-        tf_alim = ft.TextField(label=l["alimento"], expand=True, bgcolor=SURFACE_COLOR)
-        tf_gr = ft.TextField(label=l["gramos"], width=80, keyboard_type=ft.KeyboardType.NUMBER, bgcolor=SURFACE_COLOR)
+        dd_mom = ft.Dropdown(options=[ft.dropdown.Option(m) for m in l["momentos_lista"]], value=l["momentos_lista"][0], width=140, bgcolor=SURFACE_COLOR)
+        
+        # Opciones dinámicas ordenadas desde nuestro Diccionario (API Local)
+        opciones_alimentos = [ft.dropdown.Option(a.capitalize()) for a in sorted(app_data["diccionario_magi"].keys())]
+        dd_alim = ft.Dropdown(label=l["alimento"], options=opciones_alimentos, expand=True, bgcolor=SURFACE_COLOR)
+        
+        tf_gr = ft.TextField(label=l["gramos"], width=100, keyboard_type=ft.KeyboardType.NUMBER, bgcolor=SURFACE_COLOR)
         
         lista_comidas = ft.ListView(expand=True, spacing=5)
         registro_actual = [] 
@@ -287,40 +298,68 @@ def main(page: ft.Page):
                 lista_comidas.controls.append(ft.Container(content=ft.Row([ft.Text(item["alim"].capitalize(), expand=True, color=TEXT_WHITE), ft.Text(f"C: {item['c']:.1f}g | K: {item['k']:.1f}", color=NEON_PURPLE, weight="bold")]), bgcolor=SURFACE_COLOR, padding=10, border_radius=8))
             lbl_tot.value = f"C: {tc:.1f}g | K: {tk:.1f}kcal"; page.update()
 
+        tf_new_nombre = ft.TextField(label="Nombre Alimento", width=250, bgcolor=SURFACE_COLOR)
+        tf_new_carbs = ft.TextField(label="Carbs/100g", keyboard_type=ft.KeyboardType.NUMBER, width=120, bgcolor=SURFACE_COLOR)
+        tf_new_kcal = ft.TextField(label="Kcal/100g", keyboard_type=ft.KeyboardType.NUMBER, width=120, bgcolor=SURFACE_COLOR)
+
+        def save_new_food(e):
+            try:
+                c = float(tf_new_carbs.value.replace(',', '.'))
+                k = float(tf_new_kcal.value.replace(',', '.'))
+                alim_raw = tf_new_nombre.value.lower().strip()
+                if not alim_raw: return
+                app_data["diccionario_magi"][alim_raw] = {"carbs": c, "kcal": k, "cat": "Personal"}
+                guardar_datos()
+                
+                # Actualizar las opciones del Dropdown
+                nuevas_opciones = [ft.dropdown.Option(a.capitalize()) for a in sorted(app_data["diccionario_magi"].keys())]
+                dd_alim.options = nuevas_opciones
+                dd_alim.value = alim_raw.capitalize()
+                
+                close_dialog_safe(dlg_new_food)
+                mostrar_alerta("Alimento Registrado", NEON_GREEN)
+            except: mostrar_alerta("Valores numéricos inválidos", DANGER_RED)
+
+        dlg_new_food = ft.AlertDialog(
+            title=ft.Text(l["btn_ensenar"], color=NEON_PURPLE, weight="bold"),
+            content=ft.Column([ft.Text("Macros por cada 100g/ml:"), tf_new_nombre, ft.Row([tf_new_carbs, tf_new_kcal])], height=150),
+            actions=[
+                ft.TextButton("Cancelar", on_click=lambda e: close_dialog_safe(dlg_new_food)),
+                ft.TextButton("Guardar", on_click=save_new_food)
+            ]
+        )
+
         def add_food(e):
-            alim_raw = tf_alim.value.lower().strip()
-            if not alim_raw: return
+            if not dd_alim.value: return
+            alim_final = dd_alim.value.lower()
             try: gr = float(tf_gr.value.replace(',', '.'))
             except: mostrar_alerta(l["alerta_val"], DANGER_RED); return
             
             dic = app_data["diccionario_magi"]
-            matches = difflib.get_close_matches(alim_raw, dic.keys(), n=1, cutoff=0.7)
-            if matches:
-                alim_final = matches[0]
+            if alim_final in dic:
                 c_calc = (gr*dic[alim_final]["carbs"])/100; k_calc = (gr*dic[alim_final]["kcal"])/100
                 registro_actual.append({"alim": alim_final, "c": c_calc, "k": k_calc})
-                tf_alim.value = ""; tf_gr.value = ""; actualizar_pantalla_energia()
-            else: mostrar_alerta("Alimento no encontrado", DANGER_RED)
+                tf_gr.value = ""; actualizar_pantalla_energia()
 
         def limpiar(e): registro_actual.clear(); actualizar_pantalla_energia()
 
         return ft.Column([
-            ft.Row([dd_mom, tf_alim]),
-            ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), TacticalBtn("🗑️", DANGER_RED, limpiar)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([dd_mom, dd_alim]),
+            ft.Row([tf_gr, ft.ElevatedButton(l["btn_anadir"], on_click=add_food, bgcolor=WARNING_ORANGE, color=TEXT_WHITE), TacticalBtn("NUEVO ALIMENTO", NEON_PURPLE, lambda e: open_dialog_safe(dlg_new_food)), TacticalBtn("BORRAR TODO", DANGER_RED, limpiar)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             ft.Container(content=lista_comidas, expand=True, bgcolor=CARD_BG, border_radius=10, padding=10),
             ft.Container(content=ft.Row([lbl_tot], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=10)
         ], expand=True)
 
     def navigate_custom(idx):
         nonlocal current_view_idx; current_view_idx = idx
-        vistas = [view_mindset, view_estado, view_combate, view_energia]
+        vistas = [view_estado, view_combate, view_energia]
         master_container.content = vistas[idx]()
         page.update()
 
-    def CustomNavBtn(emoji, text, idx):
-        return ft.Container(content=ft.Column([ft.Text(emoji, size=22), ft.Text(text, size=11, color=TEXT_WHITE, weight="bold")], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=2), on_click=lambda e: navigate_custom(idx), expand=True, ink=True, padding=10)
+    def CustomNavBtn(text, idx):
+        return ft.Container(content=ft.Text(text, size=13, color=TEXT_WHITE, weight="bold"), on_click=lambda e: navigate_custom(idx), expand=True, ink=True, padding=15, alignment=ft.alignment.center)
 
-    bottom_nav = ft.Container(bgcolor=CARD_BG, height=70, margin=0, padding=0)
+    bottom_nav = ft.Container(bgcolor=CARD_BG, margin=0, padding=0)
 
     def reset_app(e): app_data["perfil"]["configurado"] = False; guardar_datos(); show_onboarding_interface()
 
@@ -328,11 +367,13 @@ def main(page: ft.Page):
         page.appbar = None; bottom_nav.visible = False; master_container.content = build_onboarding(); page.update()
 
     def show_main_interface():
-        page.appbar = ft.AppBar(title=ft.Text("MAGI OS", color=NEON_GREEN, weight="bold", size=18), bgcolor=CARD_BG, actions=[TacticalBtn("⚙️", WARNING_ORANGE, reset_app)])
-        bottom_nav.content = ft.Row([CustomNavBtn("💡", "Mindset", 0), CustomNavBtn("🩸", "Estado", 1), CustomNavBtn("⚔️", "Combate", 2), CustomNavBtn("🔋", "Energía", 3)], alignment=ft.MainAxisAlignment.SPACE_AROUND, spacing=0)
+        page.appbar = ft.AppBar(title=ft.Text("MAGI OS", color=NEON_GREEN, weight="bold", size=18), bgcolor=CARD_BG, actions=[TacticalBtn("AJUSTES", WARNING_ORANGE, reset_app)])
+        # Pestañas limpias y sin emojis
+        bottom_nav.content = ft.Row([CustomNavBtn("ESTADO", 0), CustomNavBtn("COMBATE", 1), CustomNavBtn("ENERGÍA", 2)], alignment=ft.MainAxisAlignment.SPACE_AROUND, spacing=0)
         bottom_nav.visible = True; navigate_custom(current_view_idx)
 
     page.add(master_container, bottom_nav)
+    
     if app_data.get("perfil", {}).get("configurado", False): show_main_interface()
     else: show_onboarding_interface()
 
