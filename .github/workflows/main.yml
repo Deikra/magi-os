@@ -20,7 +20,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Ensamblar APK
-        run: yes y | flet build apk --project-name "MagiOS" --product-name "MAGI Élite" --icon icon.png
+        # Comando purificado: Solo le decimos que construya el APK y aceptamos Flutter con "yes y |"
+        run: yes y | flet build apk
 
       - name: Guardar APK generado
         uses: actions/upload-artifact@v4
