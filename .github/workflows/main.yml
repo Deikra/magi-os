@@ -20,11 +20,12 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Ensamblar APK
-        run: yes y | flet build apk --project-name "MagiOS" --product-name "MAGI Élite" --icon icon.png
+        run: flet build apk --skip-version-check --project-name "MagiOS" --product-name "MAGI Élite" --icon icon.png
+        env:
+          CI: true
 
       - name: Guardar APK generado
         uses: actions/upload-artifact@v4
         with:
           name: MAGI-APK
           path: build/apk/**/*.apk
-          
