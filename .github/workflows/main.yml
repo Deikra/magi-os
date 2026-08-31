@@ -19,7 +19,6 @@ jobs:
       - name: Instalar dependencias de MAGI
         run: pip install -r requirements.txt
 
-      # SOLUCIÓN TÁCTICA: Inyectamos "y" automáticamente al comando
       - name: Ensamblar APK
         run: yes y | flet build apk --project-name "MagiOS" --product-name "MAGI Élite" --icon icon.png
 
@@ -28,3 +27,4 @@ jobs:
         with:
           name: MAGI-APK
           path: build/apk/**/*.apk
+          
