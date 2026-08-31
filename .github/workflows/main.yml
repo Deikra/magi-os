@@ -1,7 +1,7 @@
 name: Construir APK de MAGI
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,16 +19,9 @@ jobs:
       - name: Instalar dependencias de MAGI
         run: pip install -r requirements.txt
 
-      - name: Configurar motor Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
+      # SOLUCIÓN TÁCTICA: Inyectamos "y" automáticamente al comando
       - name: Ensamblar APK
-        # Aquí he mantenido el comando del reparador y le agregué los nombres e íconos que querías
-        run: flet build apk --skip-version-check --project-name "MagiOS" --product-name "MAGI Élite" --icon icon.png
-        env:
-          CI: true
+        run: yes y | flet build apk --project-name "MagiOS" --product-name "MAGI Élite" --icon icon.png
 
       - name: Guardar APK generado
         uses: actions/upload-artifact@v4
