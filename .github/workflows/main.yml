@@ -25,7 +25,10 @@ jobs:
           channel: 'stable'
 
       - name: Ensamblar APK
-        run: flet build apk
+        # Aquí he mantenido el comando del reparador y le agregué los nombres e íconos que querías
+        run: flet build apk --skip-version-check --project-name "MagiOS" --product-name "MAGI Élite" --icon icon.png
+        env:
+          CI: true
 
       - name: Guardar APK generado
         uses: actions/upload-artifact@v4
