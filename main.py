@@ -254,7 +254,6 @@ def main(page: ft.Page):
             except: texto_quote.value = random.choice(l["quotes"])
             page.update()
 
-        # BLINDAJE V15: El centrado solo se usa en las Columnas (infalible en todas las versiones)
         return ft.Column([
             ft.Text("MINDSET", size=24, color=NEON_PURPLE, weight="bold"),
             ft.Container(
