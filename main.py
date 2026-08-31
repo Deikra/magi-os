@@ -167,23 +167,40 @@ def main(page: ft.Page):
 
         def procesar_perfil(e):
             try:
-                peso = float(tf_peso.value.replace(',', '.'))
-                altura = float(tf_altura.value.replace(',', '.'))
+                # 1. Aseguramos que el valor se lea de forma segura, evitando el dato "None"
+                texto_peso = str(tf_peso.value or "").strip()
+                texto_altura = str(tf_altura.value or "").strip()
+
+                if not texto_peso or not texto_altura:
+                    mostrar_alerta("¡Piloto, faltan datos por ingresar!", WARNING_ORANGE)
+                    return
+
+                # 2. Limpieza blindada 
+                texto_peso = texto_peso.lower().replace('kg', '').replace(',', '.').strip()
+                texto_altura = texto_altura.lower().replace('cm', '').replace(',', '.').strip()
+                
+                # 3. Conversión al tipo de dato decimal exacto
+                peso = float(texto_peso)
+                altura = float(texto_altura)
                 imc = peso / ((altura/100)**2)
-                nivel_cond = int(dd_cond.value.split(" ")[0])
-                app_data["perfil"] = {"peso": peso, "altura": altura, "imc": imc, "meta_idx": l["metas"].index(dd_meta.value), "equipo_idx": l["equipos"].index(dd_eq.value), "acondicionamiento": nivel_cond, "configurado": True}
+                nivel_cond = int(str(dd_cond.value).split(" ")[0])
+                
+                app_data["perfil"] = {
+                    "peso": peso, 
+                    "altura": altura, 
+                    "imc": imc, 
+                    "meta_idx": l["metas"].index(dd_meta.value), 
+                    "equipo_idx": l["equipos"].index(dd_eq.value), 
+                    "acondicionamiento": nivel_cond, 
+                    "configurado": True
+                }
                 guardar_datos()
                 mostrar_alerta(f"{l['imc_res']} | IMC: {imc:.1f}", NEON_PURPLE)
                 show_main_interface()
-            except: mostrar_alerta(l["alerta_val"], DANGER_RED)
-
-        return ft.Container(
-            content=ft.Column([
-                ft.Text(l["onb_titulo"], size=22, weight="bold", color=WARNING_ORANGE),
-                tf_peso, tf_altura, dd_meta, dd_eq, dd_cond,
-                ft.ElevatedButton(l["onb_btn"], bgcolor=NEON_PURPLE, color=TEXT_WHITE, on_click=procesar_perfil, width=300)
-            ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER), padding=30, expand=True
-        )
+                
+            except Exception as ex:
+                # 4. MODO DIAGNÓSTICO: El radar mostrará el error exacto en pantalla
+                mostrar_alerta(f"Anomalía: {str(ex)}", DANGER_RED)
 
     def view_estado():
         l = LANG[current_lang]
